@@ -33,6 +33,12 @@ public class PopMenuLayout extends RelativeLayout {
 
     private OnMenuClickListener mOnMenuClickListener;
 
+    private RecyclerView recyclerView;
+
+    private LinearLayoutManager mLayoutManager;
+
+    private int mLayoutManagerOrientation = LinearLayoutManager.HORIZONTAL;
+
     private int mWidth, mHeight;
 
     private boolean[] mMenuShow;
@@ -64,10 +70,10 @@ public class PopMenuLayout extends RelativeLayout {
             }
         });
 
-        RecyclerView recyclerView = new RecyclerView(mContext, attrs, defStyleAttr);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView = new RecyclerView(mContext, attrs, defStyleAttr);
+        mLayoutManager = new LinearLayoutManager(mContext);
+        mLayoutManager.setOrientation(mLayoutManagerOrientation);
+        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(m1LevelMenuAdapter);
 
         LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -152,11 +158,14 @@ public class PopMenuLayout extends RelativeLayout {
     }
 
     private void expandMenu(int level1Index, int level2Index, int level3Index){
-
+        // TODO finish expand logic
+        PopMenuView popMenuView = new PopMenuView(mContext);
+        popMenuView.showAsDropDown(recyclerView, mWidth / mMenus.size(), 0);
+        popMenuView.setMenus(null);
     }
 
     private void hideAllChildMenu(){
-
+        // TODO hide all PopMenuView
     }
 
     private boolean isChildMenuShow(){
@@ -180,6 +189,14 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setmOnMenuClickListener(OnMenuClickListener listener){
         this.mOnMenuClickListener = listener;
+    }
+
+    public int getLayoutManagerOrientation() {
+        return mLayoutManagerOrientation;
+    }
+
+    public void setLayoutManagerOrientation(int mLayoutManagerOrientation) {
+        this.mLayoutManagerOrientation = mLayoutManagerOrientation;
     }
 
     public float dp2px(Context context, float dp) {
