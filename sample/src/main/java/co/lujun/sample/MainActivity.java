@@ -3,6 +3,7 @@ package co.lujun.sample;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import co.lujun.popmenulayout.OnMenuClickListener;
 import co.lujun.popmenulayout.PopMenuLayout;
@@ -15,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final TextView textView = (TextView) findViewById(R.id.text);
 
         String confJson = "{\n" +
                 "  \"menus\" : [\n" +
@@ -94,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
         popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
             public void onMenuClick(int level1Index, int level2Index, int level3Index) {
+                textView.setText("You click menu index is " +
+                        "\nlevel1Index = " + level1Index + "\nlevel2Index = " +
+                        level2Index + "\nlevel3Index = " + level3Index);
                 Log.d(TAG, "level1Index = " + level1Index + ", level2Index = " +
                         level2Index + ", level3Index = " + level3Index);
             }

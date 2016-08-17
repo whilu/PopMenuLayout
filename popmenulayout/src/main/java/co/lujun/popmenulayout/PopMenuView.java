@@ -38,6 +38,7 @@ public class PopMenuView extends PopupWindow {
 
     private int mWidth = -1;
     private int mHeight = -1;
+    private float mMenuItemHeight = 50.0f; // default 50dp
 
     private static final String TAG = "PopMenuView";
 
@@ -47,6 +48,7 @@ public class PopMenuView extends PopupWindow {
 
     public PopMenuView(Context context, PopMenuLayout popMenuLayout,
                        PopMenuView parentPopMenuView, int mWidth, int mHeight){
+        this.mContext = context;
         this.mPopMenuLayout = popMenuLayout;
         this.mParentPopMenuView = parentPopMenuView;
         this.mWidth = mWidth;
@@ -55,7 +57,6 @@ public class PopMenuView extends PopupWindow {
     }
 
     private void init(Context context){
-        mContext = context;
         mMenus = new ArrayList<MenuBean>();
         mMenuAdapter = new MenuAdapter(mMenus);
         mMenuAdapter.setMenuWidth(mWidth);
@@ -148,11 +149,9 @@ public class PopMenuView extends PopupWindow {
     }
 
     public void setMenus(List<MenuBean> menus) {
-        // TODO every menu item height 40dp, update this with an attribute
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mCardView.getLayoutParams();
-        params.height = (int)Util.dp2px(mContext, menus.size() * 40.0f);
+        params.height = (int) (menus.size() * Util.dp2px(mContext, mMenuItemHeight));
         mCardView.setLayoutParams(params);
-//        setHeight((int)Util.dp2px(mContext, menus.size() * 40.0f));
         mMenus.clear();
         for (MenuBean menu : menus) {
             mMenus.add(menu);
@@ -190,5 +189,11 @@ public class PopMenuView extends PopupWindow {
         this.mParentPopMenuView = mParentPopMenuView;
     }
 
+    public float getMenuItemHeight() {
+        return mMenuItemHeight;
+    }
 
+    public void setMenuItemHeight(float mMenuItemHeight) {
+        this.mMenuItemHeight = mMenuItemHeight;
+    }
 }

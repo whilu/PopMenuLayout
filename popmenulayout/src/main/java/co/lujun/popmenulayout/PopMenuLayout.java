@@ -47,6 +47,8 @@ public class PopMenuLayout extends RelativeLayout {
 
     private boolean[] mMenuShow;
 
+    private float level1MenuItemHeight = 50.0f;
+
     private static final int SUPPORT_MENU_LEVEL = 3;
 
     private static final String TAG = "PopMenuLayout";
@@ -170,12 +172,15 @@ public class PopMenuLayout extends RelativeLayout {
     private void expandMenu(int level1Index, int level2Index, int level3Index){
         // Set menus data first and then show this menu
         mMenuShow[1] = true;
+        int level1MenuSize = mMenus.get(level1Index).getChild().size();
         popMenuView.setMenus(mMenus.get(level1Index).getChild());
         popMenuView.showAtLocation(recyclerView, Gravity.NO_GRAVITY,
-                mWidth / mMenus.size() * (level1Index + 1) / 2,
-                (int)(recyclerView.getY() - recyclerView.getHeight()));
-        Log.i(TAG, "recyclerView.getY() = " + recyclerView.getY() +
-                ", recyclerView.getHeight() = " + recyclerView.getHeight());
+                mWidth / mMenus.size() * level1Index,
+                getHeight() - recyclerView.getHeight() - 131*1);
+        Log.i(TAG, "each menu height = " + Util.dp2px(mContext, popMenuView.getMenuItemHeight()));
+        Log.i(TAG, "get height = " + getHeight());
+        Log.i(TAG, "rv getY = " + recyclerView.getY());
+        Log.i(TAG, "recyclerview height = " + recyclerView.getHeight());
     }
 
     private void dealClickEventOnly(int level1Index, int level2Index, int level3Index){
