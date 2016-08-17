@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
 import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
@@ -37,6 +39,8 @@ public class PopMenuLayout extends RelativeLayout {
 
     private LinearLayoutManager mLayoutManager;
 
+    private PopMenuView popMenuView;
+
     private int mLayoutManagerOrientation = LinearLayoutManager.HORIZONTAL;
 
     private int mWidth, mHeight;
@@ -44,6 +48,8 @@ public class PopMenuLayout extends RelativeLayout {
     private boolean[] mMenuShow;
 
     private static final int SUPPORT_MENU_LEVEL = 3;
+
+    private static final String TAG = "PopMenuLayout";
 
     public PopMenuLayout(Context context) {
         this(context, null);
@@ -59,7 +65,10 @@ public class PopMenuLayout extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr){
-        mMenuShow = new boolean[]{true, false, false};
+        mMenuShow = new boolean[SUPPORT_MENU_LEVEL];
+        for (int i = 0; i < SUPPORT_MENU_LEVEL; i++) {
+            mMenuShow[i] = i == 0;
+        }
         mContext = context;
         mMenus = new ArrayList<MenuBean>();
         m1LevelMenuAdapter = new MenuAdapter(mMenus);
@@ -74,7 +83,6 @@ public class PopMenuLayout extends RelativeLayout {
         mLayoutManager = new LinearLayoutManager(mContext);
         mLayoutManager.setOrientation(mLayoutManagerOrientation);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(m1LevelMenuAdapter);
 
         LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
@@ -92,8 +100,10 @@ public class PopMenuLayout extends RelativeLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        Log.d(TAG, "onSizeChanged");
         this.mWidth = w;
         this.mHeight = h;
+        initView();
     }
 
     private void parseJson() throws JSONException{
@@ -104,11 +114,11 @@ public class PopMenuLayout extends RelativeLayout {
         JSONArray array = object.getJSONArray("menus");
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
-            mMenus.add(parseChild(obj));
+            mMenus.add(parseNode(obj));
         }
     }
 
-    private MenuBean parseChild(JSONObject object) throws JSONException{
+    private MenuBean parseNode(JSONObject object) throws JSONException{
         Iterator<String> iterator = object.keys();
         MenuBean menu = new MenuBean();
         while (iterator.hasNext()){
@@ -124,7 +134,7 @@ public class PopMenuLayout extends RelativeLayout {
                 List<MenuBean> menus = new ArrayList<MenuBean>();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    menus.add(parseChild(obj));
+                    menus.add(parseNode(obj));
                 }
                 menu.setChild(menus);
             }
@@ -135,15 +145,15 @@ public class PopMenuLayout extends RelativeLayout {
     private void dealMenuClickEvent(int level1Index, int level2Index, int level3Index){
         MenuBean menu1 = mMenus.get(level1Index);
         if (menu1.isExpandable() && isChildMenuShow()){
-            // dismiss
-            hideAllChildMenu();
+            // deal click event only
+            dealClickEventOnly(level1Index, level2Index, level3Index);
         }else if (menu1.isExpandable() && !isChildMenuShow()){
-            if (!mMenuShow[1] || !mMenuShow[2]){
-                // show level 2 menu or level 3 menu
+            if (!mMenuShow[1]){
+                // show level 2 menu
                 expandMenu(level1Index, level2Index, level3Index);
             }else {
-                // dismiss
-                hideAllChildMenu();
+                // deal click event only
+                dealClickEventOnly(level1Index, level2Index, level3Index);
             }
         }else {
             // level1 menu can not expandable
@@ -158,18 +168,44 @@ public class PopMenuLayout extends RelativeLayout {
     }
 
     private void expandMenu(int level1Index, int level2Index, int level3Index){
-        // TODO finish expand logic
-        PopMenuView popMenuView = new PopMenuView(mContext);
-        popMenuView.showAsDropDown(recyclerView, mWidth / mMenus.size(), 0);
-        popMenuView.setMenus(null);
+        // Set menus data first and then show this menu
+        mMenuShow[1] = true;
+        popMenuView.setMenus(mMenus.get(level1Index).getChild());
+        popMenuView.showAtLocation(recyclerView, Gravity.NO_GRAVITY,
+                mWidth / mMenus.size() * (level1Index + 1) / 2,
+                (int)(recyclerView.getY() - recyclerView.getHeight()));
+        Log.i(TAG, "recyclerView.getY() = " + recyclerView.getY() +
+                ", recyclerView.getHeight() = " + recyclerView.getHeight());
     }
 
-    private void hideAllChildMenu(){
-        // TODO hide all PopMenuView
+    private void dealClickEventOnly(int level1Index, int level2Index, int level3Index){
+        if (mOnMenuClickListener != null){
+            mOnMenuClickListener.onMenuClick(level1Index, level2Index, level3Index);
+        }
+        if (popMenuView.isShowing()){
+            popMenuView.dismiss();
+        }
     }
 
     private boolean isChildMenuShow(){
         return mMenuShow[1] || mMenuShow[2];
+    }
+
+    private void initView(){
+        m1LevelMenuAdapter.setMenuWidth(mWidth / SUPPORT_MENU_LEVEL);
+        recyclerView.setAdapter(m1LevelMenuAdapter);
+
+        if (popMenuView == null){
+            popMenuView = new PopMenuView(mContext, this, mWidth / SUPPORT_MENU_LEVEL, -1);
+            popMenuView.setOnMenuClickListener(new OnMenuClickListener() {
+                @Override
+                public void onMenuClick(int level1Index, int level2Index, int level3Index) {
+                    if (mOnMenuClickListener != null){
+                        mOnMenuClickListener.onMenuClick(level1Index, level2Index, level3Index);
+                    }
+                }
+            });
+        }
     }
 
     public String getConfigJson() {
@@ -187,7 +223,7 @@ public class PopMenuLayout extends RelativeLayout {
         }
     }
 
-    public void setmOnMenuClickListener(OnMenuClickListener listener){
+    public void setOnMenuClickListener(OnMenuClickListener listener){
         this.mOnMenuClickListener = listener;
     }
 
@@ -199,13 +235,13 @@ public class PopMenuLayout extends RelativeLayout {
         this.mLayoutManagerOrientation = mLayoutManagerOrientation;
     }
 
-    public float dp2px(Context context, float dp) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return dp * scale + 0.5f;
+    public boolean[] getMenuShow(){
+        return mMenuShow;
     }
 
-    public float sp2px(Context context, float sp) {
-        final float scale = context.getResources().getDisplayMetrics().scaledDensity;
-        return sp * scale;
+    public void setMenus(int pos, boolean expanded){
+        if (pos >= 0 && pos < SUPPORT_MENU_LEVEL) {
+            mMenuShow[pos] = expanded;
+        }
     }
 }
