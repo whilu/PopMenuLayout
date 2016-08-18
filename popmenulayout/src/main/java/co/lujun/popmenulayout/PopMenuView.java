@@ -1,9 +1,11 @@
 package co.lujun.popmenulayout;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import co.lujun.popmenulayout.adapter.MenuAdapter;
@@ -54,6 +57,8 @@ public class PopMenuView extends PopupWindow {
     private int mAnimStyle = -1;
 
     private float mMenuItemHeight = 50.0f; // default 50dp
+
+    private boolean isWithLevel1MenuWidth = false;
 
     private static final String TAG = "PopMenuView";
 
@@ -152,6 +157,25 @@ public class PopMenuView extends PopupWindow {
         }
     }
 
+    private int getSuitableWidth(List<MenuBean> menus){
+        if (isWithLevel1MenuWidth){
+            return mWidth;
+        }
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(mMenuAdapter.getMenuTextSize());
+        List<Float> tmpList = new ArrayList<Float>();
+        for (MenuBean menu : menus) {
+            tmpList.add(paint.measureText(TextUtils.isEmpty(menu.getText()) ? "" : menu.getText()));
+        }
+
+        float tmpMaxW = Collections.max(tmpList) + mMenuAdapter.getTextPaddingLeft() +
+                mMenuAdapter.getTextPaddingRight();
+        if (tmpMaxW < mWidth && tmpMaxW > 0){
+            mWidth = (int) tmpMaxW;
+        }
+        return mWidth;
+    }
+
     public int getHeight() {
         return mHeight;
     }
@@ -169,9 +193,12 @@ public class PopMenuView extends PopupWindow {
     }
 
     public void setMenus(List<MenuBean> menus) {
+        int suitW = getSuitableWidth(menus);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mCardView.getLayoutParams();
         params.height = menus.size() * (int) Util.dp2px(mContext, mMenuItemHeight);
+        params.width = suitW;
         mCardView.setLayoutParams(params);
+        mMenuAdapter.setMenuWidth(suitW);
         mMenus.clear();
         for (MenuBean menu : menus) {
             mMenus.add(menu);
@@ -217,11 +244,19 @@ public class PopMenuView extends PopupWindow {
         this.mMenuItemHeight = mMenuItemHeight;
     }
 
-    public int getmAnimStyle() {
+    public int getAnimStyle() {
         return mAnimStyle;
     }
 
-    public void setmAnimStyle(int mAnimStyle) {
+    public void setAnimStyle(int mAnimStyle) {
         this.mAnimStyle = mAnimStyle;
+    }
+
+    public boolean isWithLevel1MenuWidth() {
+        return isWithLevel1MenuWidth;
+    }
+
+    public void setWithLevel1MenuWidth(boolean withLevel1MenuWidth) {
+        isWithLevel1MenuWidth = withLevel1MenuWidth;
     }
 }

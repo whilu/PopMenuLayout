@@ -51,6 +51,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     private float mDividerDp = 1.0f;
 
+    private float mTextPaddingLeft = 10.0f; // 10dp
+
+    private float mTextPaddingRight = 10.0f; // 10dp
+
+    private float mTextPaddingTop = 5.0f; // 5dp
+
+    private float mTextPaddingBottom = 5.0f; // 5dp
+
     private static final String TAG = "MenuAdapter";
 
     public MenuAdapter(Context context, List<MenuBean> menus, int orientation){
@@ -94,6 +102,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         holder.tvMenuText.setTextColor(mMenuTextColor);
         holder.tvMenuText.setTextSize(mMenuTextSize);
         holder.tvMenuText.setText(menu.getText());
+        holder.tvMenuText.setPadding(
+                (int) Util.dp2px(mContext, mTextPaddingLeft),
+                (int) Util.dp2px(mContext, mTextPaddingTop),
+                (int) Util.dp2px(mContext, mTextPaddingRight),
+                (int) Util.dp2px(mContext, mTextPaddingBottom));
 
         if (menu.isExpandable()){
             holder.ivMenuIcon.setImageResource(mExpandableIcon);
@@ -161,60 +174,92 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         this.mMenuWidth = mMenuWidth;
     }
 
-    public float getmDividerDp() {
+    public float getDividerDp() {
         return mDividerDp;
     }
 
-    public void setmDividerDp(float mDividerDp) {
+    public void setDividerDp(float mDividerDp) {
         this.mDividerDp = mDividerDp;
     }
 
-    public int getmDividerColor() {
+    public int getDividerColor() {
         return mDividerColor;
     }
 
-    public void setmDividerColor(int mDividerColor) {
+    public void setDividerColor(int mDividerColor) {
         this.mDividerColor = mDividerColor;
     }
 
-    public int getmExpandableIcon() {
+    public int getExpandableIcon() {
         return mExpandableIcon;
     }
 
-    public void setmExpandableIcon(int mExpandableIcon) {
+    public void setExpandableIcon(int mExpandableIcon) {
         this.mExpandableIcon = mExpandableIcon;
     }
 
-    public float getmMenuTextSize() {
-        return mMenuTextSize;
+    public float getMenuTextSize() {
+        return Util.sp2px(mContext, mMenuTextSize);
     }
 
-    public void setmMenuTextSize(float mMenuTextSize) {
+    public void setMenuTextSize(float mMenuTextSize) {
         this.mMenuTextSize = mMenuTextSize;
     }
 
-    public int getmMenuTextColor() {
+    public int getMenuTextColor() {
         return mMenuTextColor;
     }
 
-    public void setmMenuTextColor(int mMenuTextColor) {
+    public void setMenuTextColor(int mMenuTextColor) {
         this.mMenuTextColor = mMenuTextColor;
     }
 
-    public int getmHorizontalMenuBackgroundRes() {
+    public int getHorizontalMenuBackgroundRes() {
         return mHorizontalMenuBackgroundRes;
     }
 
-    public void setmHorizontalMenuBackgroundRes(int mHorizontalMenuBackgroundRes) {
+    public void setHorizontalMenuBackgroundRes(int mHorizontalMenuBackgroundRes) {
         this.mHorizontalMenuBackgroundRes = mHorizontalMenuBackgroundRes;
     }
 
-    public int getmVerticalMenuBackgroundRes() {
+    public int getVerticalMenuBackgroundRes() {
         return mVerticalMenuBackgroundRes;
     }
 
-    public void setmVerticalMenuBackgroundRes(int mVerticalMenuBackgroundRes) {
+    public void setVerticalMenuBackgroundRes(int mVerticalMenuBackgroundRes) {
         this.mVerticalMenuBackgroundRes = mVerticalMenuBackgroundRes;
+    }
+
+    public float getTextPaddingBottom() {
+        return Util.dp2px(mContext, mTextPaddingBottom);
+    }
+
+    public void setTextPaddingBottom(float mTextPaddingBottom) {
+        this.mTextPaddingBottom = mTextPaddingBottom;
+    }
+
+    public float getTextPaddingTop() {
+        return Util.dp2px(mContext, mTextPaddingTop);
+    }
+
+    public void setTextPaddingTop(float mTextPaddingTop) {
+        this.mTextPaddingTop = mTextPaddingTop;
+    }
+
+    public float getTextPaddingRight() {
+        return Util.dp2px(mContext, mTextPaddingRight);
+    }
+
+    public void setTextPaddingRight(float mTextPaddingRight) {
+        this.mTextPaddingRight = mTextPaddingRight;
+    }
+
+    public float getTextPaddingLeft() {
+        return Util.dp2px(mContext, mTextPaddingLeft);
+    }
+
+    public void setTextPaddingLeft(float mTextPaddingLeft) {
+        this.mTextPaddingLeft = mTextPaddingLeft;
     }
 
     static class MenuViewHolder extends RecyclerView.ViewHolder{

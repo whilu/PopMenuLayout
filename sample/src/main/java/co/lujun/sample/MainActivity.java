@@ -1,6 +1,6 @@
 package co.lujun.sample;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import co.lujun.popmenulayout.OnMenuClickListener;
 import co.lujun.popmenulayout.PopMenuLayout;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         PopMenuLayout popMenuLayout = (PopMenuLayout) findViewById(R.id.popMenuLayout);
         popMenuLayout.setConfigJson(confJson);
+        popMenuLayout.setLevel2MenuAnimStyle(R.style.PopAnimation);
         popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
             public void onMenuClick(int level1Index, int level2Index, int level3Index) {

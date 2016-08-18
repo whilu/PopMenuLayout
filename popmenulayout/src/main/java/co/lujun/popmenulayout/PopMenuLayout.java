@@ -47,6 +47,8 @@ public class PopMenuLayout extends RelativeLayout {
 
     private int mHeight; // PopMenuLayout height
 
+    private int mLevel2MenuAnimStyle = -1;
+
     private boolean[] mMenuShow;
 
     private float level1MenuItemHeight = 50.0f;
@@ -179,9 +181,11 @@ public class PopMenuLayout extends RelativeLayout {
         int[] location = new int[2];
         recyclerView.getLocationOnScreen(location);
         List<MenuBean> menus = mMenus.get(level1Index).getChild();
+        popMenuView.setAnimationStyle(mLevel2MenuAnimStyle);
         popMenuView.setMenus(menus);
         popMenuView.showAtLocation(recyclerView, Gravity.NO_GRAVITY,
-                mWidth / mMenus.size() * level1Index,
+                mWidth / mMenus.size() * level1Index +
+                        (mWidth / mMenus.size() - popMenuView.getWidth()) / 2,
                 location[1] - menus.size() * recyclerView.getHeight());
     }
 
@@ -266,11 +270,11 @@ public class PopMenuLayout extends RelativeLayout {
         this.mMenus = mMenus;
     }
 
-    public float getmChildMenuItemHeight() {
+    public float getChildMenuItemHeight() {
         return mChildMenuItemHeight;
     }
 
-    public void setmChildMenuItemHeight(float mChildMenuItemHeight) {
+    public void setChildMenuItemHeight(float mChildMenuItemHeight) {
         this.mChildMenuItemHeight = mChildMenuItemHeight;
     }
 
@@ -280,6 +284,14 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setLevel1MenuItemHeight(float level1MenuItemHeight) {
         this.level1MenuItemHeight = level1MenuItemHeight;
+    }
+
+    public int getLevel2MenuAnimStyle() {
+        return mLevel2MenuAnimStyle;
+    }
+
+    public void setLevel2MenuAnimStyle(int mLevel2MenuAnimStyle) {
+        this.mLevel2MenuAnimStyle = mLevel2MenuAnimStyle;
     }
 
 }

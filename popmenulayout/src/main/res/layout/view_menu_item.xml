@@ -11,7 +11,13 @@
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:gravity="center"
-        android:text="Menu" />
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:singleLine="true"
+        android:text="Menu"
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/iv_expandable_icon"
