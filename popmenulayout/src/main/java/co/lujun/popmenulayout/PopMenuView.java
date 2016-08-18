@@ -119,11 +119,23 @@ public class PopMenuView extends PopupWindow {
                         mWidth, mHeight));
             }
             popMenuView = getChildPopMenuView();
-            popMenuView.setMenus(mMenus.get(level2Index).getChild());
+            List<MenuBean> menus = mMenus.get(level2Index).getChild();
+            popMenuView.setMenus(menus);
             popMenuView.setOnMenuClickListener(mOnMenuClickListener);
-            popMenuView.showAtLocation(mPopMenuLayout, Gravity.NO_GRAVITY,
-                    (int) mRootView.getX() + mRootView.getWidth(),
-                    (int) mRootView.getY() + level2Index * mRootView.getHeight());
+
+            int[] location = new int[2];
+            int showX, showY;
+            mRootView.getLocationOnScreen(location);
+
+            // border menu deal, this level 1 menu layout child's size must >= 2
+            if (level1Index >= 1 && level1Index == mPopMenuLayout.getMenus().size() - 1){
+                showX = location[0] - mRootView.getWidth();
+            }else {
+                showX = location[0] + mRootView.getWidth();
+            }
+            showY = location[1] + (level2Index - menus.size() + 1)
+                    * (int) Util.dp2px(mContext, mMenuItemHeight);
+            popMenuView.showAtLocation(mPopMenuLayout, Gravity.NO_GRAVITY, showX, showY);
         }else {
             if (mOnMenuClickListener != null){
                 mOnMenuClickListener.onMenuClick(level1Index, level2Index, level3Index);
@@ -150,7 +162,7 @@ public class PopMenuView extends PopupWindow {
 
     public void setMenus(List<MenuBean> menus) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mCardView.getLayoutParams();
-        params.height = (int) (menus.size() * Util.dp2px(mContext, mMenuItemHeight));
+        params.height = menus.size() * (int) Util.dp2px(mContext, mMenuItemHeight);
         mCardView.setLayoutParams(params);
         mMenus.clear();
         for (MenuBean menu : menus) {

@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
             public void onMenuClick(int level1Index, int level2Index, int level3Index) {
-                textView.setText("You click menu index is " +
+                textView.setText("Click menu index:" +
                         "\nlevel1Index = " + level1Index + "\nlevel2Index = " +
                         level2Index + "\nlevel3Index = " + level3Index);
                 Log.d(TAG, "level1Index = " + level1Index + ", level2Index = " +
