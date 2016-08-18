@@ -24,20 +24,35 @@ import co.lujun.popmenulayout.adapter.MenuAdapter;
 public class PopMenuView extends PopupWindow {
 
     private Context mContext;
+
     private View mRootView;
+
     private CardView mCardView;
+
     private RecyclerView mRecyclerView;
+
     private MenuAdapter mMenuAdapter;
+
     private LinearLayoutManager mLayoutManager;
+
     private PopMenuLayout mPopMenuLayout;
-    private PopMenuView mChildPopMenuView, mParentPopMenuView;
+
+    private PopMenuView mChildPopMenuView;
+
+    private PopMenuView mParentPopMenuView;
+
     private OnMenuClickListener mOnMenuClickListener;
+
     private List<MenuBean> mMenus;
 
     private int mLayoutManagerOrientation = LinearLayoutManager.VERTICAL;
 
     private int mWidth = -1;
+
     private int mHeight = -1;
+
+    private int mAnimStyle = -1;
+
     private float mMenuItemHeight = 50.0f; // default 50dp
 
     private static final String TAG = "PopMenuView";
@@ -58,7 +73,7 @@ public class PopMenuView extends PopupWindow {
 
     private void init(Context context){
         mMenus = new ArrayList<MenuBean>();
-        mMenuAdapter = new MenuAdapter(mMenus);
+        mMenuAdapter = new MenuAdapter(mContext, mMenus, mLayoutManagerOrientation);
         mMenuAdapter.setMenuWidth(mWidth);
         mMenuAdapter.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
@@ -88,24 +103,17 @@ public class PopMenuView extends PopupWindow {
         setWidth(RelativeLayout.LayoutParams.WRAP_CONTENT);
         setHeight(RelativeLayout.LayoutParams.WRAP_CONTENT);
         setFocusable(true);
-
-        // TODO add show & hide animation
-
-        // TODO finish click event when click position outside of current view
-
-        // TODO add attributes
-
+        setAnimationStyle(mAnimStyle);
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-        if(mPopMenuLayout != null){
-            mPopMenuLayout.setMenus(1, false);
-            mPopMenuLayout.setMenus(2, false);
-        }
         if (getParentPopMenuView() != null && getParentPopMenuView().isShowing()){
             getParentPopMenuView().dismiss();
+        }
+        if(mPopMenuLayout != null){
+            mPopMenuLayout.setAllChildLevelMenuDismissFlag();
         }
     }
 
@@ -207,5 +215,13 @@ public class PopMenuView extends PopupWindow {
 
     public void setMenuItemHeight(float mMenuItemHeight) {
         this.mMenuItemHeight = mMenuItemHeight;
+    }
+
+    public int getmAnimStyle() {
+        return mAnimStyle;
+    }
+
+    public void setmAnimStyle(int mAnimStyle) {
+        this.mAnimStyle = mAnimStyle;
     }
 }

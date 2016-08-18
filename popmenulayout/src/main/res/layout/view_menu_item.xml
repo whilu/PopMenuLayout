@@ -20,4 +20,20 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_expandable_arrow" />
+
+    <View
+        android:id="@+id/view_divider_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/view_divider_right"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -43,11 +43,15 @@ public class PopMenuLayout extends RelativeLayout {
 
     private int mLayoutManagerOrientation = LinearLayoutManager.HORIZONTAL;
 
-    private int mWidth, mHeight;
+    private int mWidth; // PopMenuLayout width
+
+    private int mHeight; // PopMenuLayout height
 
     private boolean[] mMenuShow;
 
     private float level1MenuItemHeight = 50.0f;
+
+    private float mChildMenuItemHeight = 50.0f;
 
     private static final int SUPPORT_MENU_LEVEL = 3;
 
@@ -73,7 +77,7 @@ public class PopMenuLayout extends RelativeLayout {
         }
         mContext = context;
         mMenus = new ArrayList<MenuBean>();
-        m1LevelMenuAdapter = new MenuAdapter(mMenus);
+        m1LevelMenuAdapter = new MenuAdapter(mContext, mMenus, mLayoutManagerOrientation);
         m1LevelMenuAdapter.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
             public void onMenuClick(int level1Index, int level2Index, int level3Index) {
@@ -211,6 +215,22 @@ public class PopMenuLayout extends RelativeLayout {
         }
     }
 
+    public boolean[] getMenuShow(){
+        return mMenuShow;
+    }
+
+    public void setMenus(int pos, boolean expanded){
+        if (pos >= 0 && pos < SUPPORT_MENU_LEVEL) {
+            mMenuShow[pos] = expanded;
+        }
+    }
+
+    public void setAllChildLevelMenuDismissFlag(){
+        for (int i = 1; i < SUPPORT_MENU_LEVEL; i++) {
+            mMenuShow[i] = false;
+        }
+    }
+
     public String getConfigJson() {
         return mConfigJson;
     }
@@ -238,22 +258,28 @@ public class PopMenuLayout extends RelativeLayout {
         this.mLayoutManagerOrientation = mLayoutManagerOrientation;
     }
 
-    public boolean[] getMenuShow(){
-        return mMenuShow;
-    }
-
-    public void setMenus(int pos, boolean expanded){
-        if (pos >= 0 && pos < SUPPORT_MENU_LEVEL) {
-            mMenuShow[pos] = expanded;
-        }
-    }
-
     public List<MenuBean> getMenus() {
         return mMenus;
     }
 
     public void setMenus(List<MenuBean> mMenus) {
         this.mMenus = mMenus;
+    }
+
+    public float getmChildMenuItemHeight() {
+        return mChildMenuItemHeight;
+    }
+
+    public void setmChildMenuItemHeight(float mChildMenuItemHeight) {
+        this.mChildMenuItemHeight = mChildMenuItemHeight;
+    }
+
+    public float getLevel1MenuItemHeight() {
+        return level1MenuItemHeight;
+    }
+
+    public void setLevel1MenuItemHeight(float level1MenuItemHeight) {
+        this.level1MenuItemHeight = level1MenuItemHeight;
     }
 
 }
