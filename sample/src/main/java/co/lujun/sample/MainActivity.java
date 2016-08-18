@@ -2,7 +2,6 @@ package co.lujun.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import co.lujun.popmenulayout.OnMenuClickListener;
@@ -99,10 +98,8 @@ public class MainActivity extends Activity {
             @Override
             public void onMenuClick(int level1Index, int level2Index, int level3Index) {
                 textView.setText("Click menu index:" +
-                        "\nlevel1Index = " + level1Index + "\nlevel2Index = " +
-                        level2Index + "\nlevel3Index = " + level3Index);
-                Log.d(TAG, "level1Index = " + level1Index + ", level2Index = " +
-                        level2Index + ", level3Index = " + level3Index);
+                        "\nlevel1 index = " + level1Index + "\nlevel2 index = " +
+                        level2Index + "\nlevel3 index = " + level3Index);
             }
         });
     }

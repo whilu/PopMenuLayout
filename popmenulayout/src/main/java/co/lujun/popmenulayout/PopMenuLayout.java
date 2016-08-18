@@ -114,7 +114,7 @@ public class PopMenuLayout extends RelativeLayout {
                 dealMenuClickEvent(level1Index, level2Index, level3Index);
             }
         });
-        invalidatView();
+        invalidateView();
 
         recyclerView = new RecyclerView(mContext, attrs, defStyleAttr);
         mLayoutManager = new LinearLayoutManager(mContext);
@@ -133,7 +133,7 @@ public class PopMenuLayout extends RelativeLayout {
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.PopMenuLayout,
                 defStyleAttr, 0);
         mConfigJson = attributes.getString(R.styleable.PopMenuLayout_config_json);
-        mLevel2MenuAnimStyle = attributes.getInteger(
+        mLevel2MenuAnimStyle = attributes.getResourceId(
                 R.styleable.PopMenuLayout_level2_menu_anim_style, mLevel2MenuAnimStyle);
         mLevel1MenuItemHeight = attributes.getDimension(
                 R.styleable.PopMenuLayout_level1_menu_item_height,
@@ -159,16 +159,16 @@ public class PopMenuLayout extends RelativeLayout {
                 Util.dp2px(context, mMenuTextPaddingBottom));
         mDividerColor = attributes.getColor(R.styleable.PopMenuLayout_menu_divider_color,
                 mDividerColor);
-        mExpandableIcon = attributes.getInt(R.styleable.PopMenuLayout_menu_expandable_icon,
+        mExpandableIcon = attributes.getResourceId(R.styleable.PopMenuLayout_menu_expandable_icon,
                 mExpandableIcon);
         mMenuTextColor = attributes.getColor(R.styleable.PopMenuLayout_menu_text_color,
                 mMenuTextColor);
-        mHorizontalMenuBackgroundRes = attributes.getInteger(
+        mHorizontalMenuBackgroundRes = attributes.getResourceId(
                 R.styleable.PopMenuLayout_horizontal_menu_bg, mHorizontalMenuBackgroundRes);
-        mVerticalMenuBackgroundRes = attributes.getInteger(
+        mVerticalMenuBackgroundRes = attributes.getResourceId(
                 R.styleable.PopMenuLayout_vertical_menu_bg, mVerticalMenuBackgroundRes);
-        mMenuTextSize = attributes.getFloat(R.styleable.PopMenuLayout_menu_text_size,
-                mMenuTextSize);
+        mMenuTextSize = attributes.getDimension(R.styleable.PopMenuLayout_menu_text_size,
+                Util.sp2px(context, mMenuTextSize));
         attributes.recycle();
     }
 
@@ -258,7 +258,7 @@ public class PopMenuLayout extends RelativeLayout {
         popMenuView.showAtLocation(recyclerView, Gravity.NO_GRAVITY,
                 mWidth / mMenus.size() * level1Index +
                         (mWidth / mMenus.size() - popMenuView.getWidth()) / 2,
-                location[1] - menus.size() * recyclerView.getHeight());
+                location[1] - menus.size() * (int) mChildMenuItemHeight);
     }
 
     private void dealClickEventOnly(int level1Index, int level2Index, int level3Index){
@@ -275,8 +275,7 @@ public class PopMenuLayout extends RelativeLayout {
     }
 
     private void initView(){
-        m1LevelMenuAdapter.setMenuWidth(mWidth / SUPPORT_MENU_LEVEL);
-        recyclerView.setAdapter(m1LevelMenuAdapter);
+        invalidateData();
 
         if (popMenuView == null){
             popMenuView = new PopMenuView(mContext, this, mWidth / SUPPORT_MENU_LEVEL, -1);
@@ -289,11 +288,11 @@ public class PopMenuLayout extends RelativeLayout {
                     }
                 }
             });
-            invalidatView();
+            invalidateView();
         }
     }
     
-    private void invalidatView(){
+    private void invalidateView(){
         if (m1LevelMenuAdapter != null){
             m1LevelMenuAdapter.setTextPaddingLeft(mMenuTextPaddingLeft);
             m1LevelMenuAdapter.setTextPaddingBottom(mMenuTextPaddingBottom);
@@ -310,7 +309,6 @@ public class PopMenuLayout extends RelativeLayout {
         }
         if (popMenuView != null){
             popMenuView.setWithLevel1MenuWidth(isWithLevel1MenuWidth);
-            popMenuView.setWithLevel1MenuWidth(isWithLevel1MenuWidth);
             popMenuView.setMenuTextPaddingLeft(mMenuTextPaddingLeft);
             popMenuView.setMenuTextPaddingBottom(mMenuTextPaddingBottom);
             popMenuView.setMenuTextPaddingRight(mMenuTextPaddingRight);
@@ -322,6 +320,18 @@ public class PopMenuLayout extends RelativeLayout {
             popMenuView.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
             popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
             popMenuView.setMenuTextSize(mMenuTextSize);
+        }
+    }
+
+    private void invalidateData(){
+        try {
+            mMenus.clear();
+            parseJson();
+            m1LevelMenuAdapter.setMenuWidth(mWidth / (mMenus.size() > 0 ? mMenus.size() : 1));
+            recyclerView.setAdapter(m1LevelMenuAdapter);
+            m1LevelMenuAdapter.notifyDataSetChanged();
+        }catch (JSONException e){
+            e.printStackTrace();
         }
     }
 
@@ -347,13 +357,6 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setConfigJson(String configJson) {
         this.mConfigJson = configJson;
-        try {
-            mMenus.clear();
-            parseJson();
-            m1LevelMenuAdapter.notifyDataSetChanged();
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
     }
 
     public void setOnMenuClickListener(OnMenuClickListener listener){
@@ -414,7 +417,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuTextPaddingBottom(float paddingBottom) {
         this.mMenuTextPaddingBottom = paddingBottom;
-        invalidatView();
+        invalidateView();
     }
 
     public float getMenuTextPaddingTop() {
@@ -423,7 +426,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuTextPaddingTop(float paddingTop) {
         this.mMenuTextPaddingTop = paddingTop;
-        invalidatView();
+        invalidateView();
     }
 
     public float getMenuTextPaddingRight() {
@@ -432,7 +435,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuTextPaddingRight(float paddingRight) {
         this.mMenuTextPaddingRight = paddingRight;
-        invalidatView();
+        invalidateView();
     }
 
     public float getMenuTextPaddingLeft() {
@@ -441,7 +444,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuTextPaddingLeft(float paddingLeft) {
         this.mMenuTextPaddingLeft = paddingLeft;
-        invalidatView();
+        invalidateView();
     }
 
     public float getMenuDividerDp() {
@@ -450,7 +453,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuDividerDp(float menuDividerDp) {
         this.mMenuDividerDp = menuDividerDp;
-        invalidatView();
+        invalidateView();
     }
 
     public int getDividerColor() {
@@ -459,7 +462,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setDividerColor(int dividerColor) {
         this.mDividerColor = dividerColor;
-        invalidatView();
+        invalidateView();
     }
 
     public int getExpandableIcon() {
@@ -468,7 +471,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setExpandableIcon(int expandableIcon) {
         this.mExpandableIcon = expandableIcon;
-        invalidatView();
+        invalidateView();
     }
 
     public int getMenuTextColor() {
@@ -477,7 +480,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuTextColor(int textColor) {
         this.mMenuTextColor = textColor;
-        invalidatView();
+        invalidateView();
     }
 
     public int getHorizontalMenuBackgroundRes() {
@@ -486,7 +489,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setHorizontalMenuBackgroundRes(int horizontalMenuBackgroundRes) {
         this.mHorizontalMenuBackgroundRes = horizontalMenuBackgroundRes;
-        invalidatView();
+        invalidateView();
     }
 
     public int getVerticalMenuBackgroundRes() {
@@ -495,7 +498,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setVerticalMenuBackgroundRes(int verticalMenuBackgroundRes) {
         this.mVerticalMenuBackgroundRes = verticalMenuBackgroundRes;
-        invalidatView();
+        invalidateView();
     }
 
     public float getMenuTextSize() {
@@ -504,7 +507,7 @@ public class PopMenuLayout extends RelativeLayout {
 
     public void setMenuTextSize(float textSize) {
         this.mMenuTextSize = textSize;
-        invalidatView();
+        invalidateView();
     }
 
 }

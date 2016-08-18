@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#33000000"
     tools:context="co.lujun.sample.MainActivity">
 
     <TextView
@@ -17,4 +17,24 @@
         android:id="@+id/popMenuLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <!--<co.lujun.popmenulayout.PopMenuLayout
+        android:id="@+id/popMenuLayout"
+        android:layout_width="match_parent"
+        app:level2_menu_anim_style="@style/PopAnimation"
+        android:layout_height="match_parent"
+        app:level1_menu_item_height="100dp"
+        app:child_menu_item_height="70dp"
+        app:cmenu_w_follow_level1_menu="false"
+        app:menu_divider_color="#ff0000"
+        app:menu_expandable_icon="@mipmap/ic_launcher"
+        app:menu_text_color="#00ff00"
+        app:horizontal_menu_bg="@mipmap/ic_launcher"
+        app:vertical_menu_bg="@mipmap/ic_launcher"
+        app:menu_text_size="8"
+        app:menu_divider_width="4dp"
+        app:menu_left_padding="0dp"
+        app:menu_right_padding="0dp"
+        app:menu_top_padding="0dp"
+        app:menu_bottom_padding="0dp"/>-->
 </RelativeLayout>

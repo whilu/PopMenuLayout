@@ -172,6 +172,7 @@ public class PopMenuView extends PopupWindow {
                         mWidth, mHeight));
             }
             popMenuView = getChildPopMenuView();
+            cloneAttributes(popMenuView);
             List<MenuBean> menus = mMenus.get(level2Index).getChild();
             popMenuView.setMenus(menus);
             popMenuView.setOnMenuClickListener(mOnMenuClickListener);
@@ -194,6 +195,22 @@ public class PopMenuView extends PopupWindow {
             }
             dismiss();
         }
+    }
+
+    private void cloneAttributes(PopMenuView popMenuView){
+        popMenuView.setMenuItemHeight(mMenuItemHeight);
+        popMenuView.setWithLevel1MenuWidth(isWithLevel1MenuWidth);
+        popMenuView.setMenuTextPaddingLeft(mMenuTextPaddingLeft);
+        popMenuView.setMenuTextPaddingBottom(mMenuTextPaddingBottom);
+        popMenuView.setMenuTextPaddingRight(mMenuTextPaddingRight);
+        popMenuView.setMenuTextPaddingTop(mMenuTextPaddingTop);
+        popMenuView.setMenuDividerDp(mMenuDividerDp);
+        popMenuView.setDividerColor(mDividerColor);
+        popMenuView.setExpandableIcon(mExpandableIcon);
+        popMenuView.setMenuTextColor(mMenuTextColor);
+        popMenuView.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
+        popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
+        popMenuView.setMenuTextSize(mMenuTextSize);
     }
 
     private int getSuitableWidth(List<MenuBean> menus){
@@ -238,6 +255,7 @@ public class PopMenuView extends PopupWindow {
         params.width = suitW;
         mCardView.setLayoutParams(params);
         mMenuAdapter.setMenuWidth(suitW);
+        mMenuAdapter.setMenuHeight((int) mMenuItemHeight);
         mMenus.clear();
         for (MenuBean menu : menus) {
             mMenus.add(menu);

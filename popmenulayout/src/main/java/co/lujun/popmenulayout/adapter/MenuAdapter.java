@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     private int mMenuHeight;
 
-    private int mDividerColor = android.R.color.darker_gray;
+    private int mDividerColor = Color.GRAY;
 
     private int mExpandableIcon = R.drawable.ic_expandable_arrow;
 
@@ -77,6 +78,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         this.mTextPaddingRight = Util.dp2px(mContext, mTextPaddingRight);
         this.mTextPaddingBottom = Util.dp2px(mContext, mTextPaddingBottom);
         this.mDividerDp = Util.dp2px(mContext, mDividerDp);
+        this.mMenuTextSize = Util.sp2px(mContext, mMenuTextSize);
     }
 
     @Override
@@ -105,7 +107,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         holder.rlRootView.setLayoutParams(params);
 
         holder.tvMenuText.setTextColor(mMenuTextColor);
-        holder.tvMenuText.setTextSize(mMenuTextSize);
+        holder.tvMenuText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mMenuTextSize);
         holder.tvMenuText.setText(menu.getText());
         holder.tvMenuText.setPadding((int) mTextPaddingLeft, (int) mTextPaddingTop,
                 (int) mTextPaddingRight, (int) mTextPaddingBottom);
@@ -125,6 +127,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                     holder.viewDividerRight.getLayoutParams();
             dividerRightParams.width = (int) mDividerDp;
             holder.viewDividerRight.setLayoutParams(dividerRightParams);
+            holder.viewDividerRight.setBackgroundColor(mDividerColor);
             holder.viewDividerRight.setVisibility(position == mMenus.size() - 1 ?
                     View.GONE : View.VISIBLE);
         }else {
@@ -135,6 +138,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                     holder.viewDividerBottom.getLayoutParams();
             bottomRightParams.height = (int) mDividerDp;
             holder.viewDividerBottom.setLayoutParams(bottomRightParams);
+            holder.viewDividerBottom.setBackgroundColor(mDividerColor);
             holder.viewDividerBottom.setVisibility(position == mMenus.size() - 1 ?
                     View.GONE : View.VISIBLE);
         }
@@ -201,7 +205,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     }
 
     public float getMenuTextSize() {
-        return Util.sp2px(mContext, mMenuTextSize);
+        return mMenuTextSize;
     }
 
     public void setMenuTextSize(float mMenuTextSize) {
