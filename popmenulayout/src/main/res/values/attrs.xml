@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PopMenuLayout">
+        <attr name="config_json" format="string" />
+
+        <attr name="level2_menu_anim_style" format="integer" />
+        <attr name="level1_menu_item_height" format="dimension" />
+        <attr name="child_menu_item_height" format="dimension" />
+        <attr name="cmenu_w_follow_level1_menu" format="boolean" />
+        <attr name="menu_divider_color" format="color" />
+        <attr name="menu_expandable_icon" format="integer" />
+        <attr name="menu_text_color" format="color" />
+        <attr name="horizontal_menu_bg" format="integer" />
+        <attr name="vertical_menu_bg" format="integer" />
+
+        <attr name="menu_text_size" format="float" />
+        <attr name="menu_divider_width" format="dimension" />
+        <attr name="menu_left_padding" format="dimension" />
+        <attr name="menu_right_padding" format="dimension" />
+        <attr name="menu_top_padding" format="dimension" />
+        <attr name="menu_bottom_padding" format="dimension" />
+    </declare-styleable>
+</resources>

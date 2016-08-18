@@ -1,6 +1,8 @@
 package co.lujun.popmenulayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -51,11 +53,35 @@ public class PopMenuLayout extends RelativeLayout {
 
     private boolean[] mMenuShow;
 
-    private float level1MenuItemHeight = 50.0f;
+    private float mLevel1MenuItemHeight = 50.0f;
 
     private float mChildMenuItemHeight = 50.0f;
 
+    private boolean isWithLevel1MenuWidth = false;
+
     private static final int SUPPORT_MENU_LEVEL = 3;
+
+    private float mMenuDividerDp = 1.0f;
+
+    private float mMenuTextPaddingLeft = 10.0f; // 10dp
+
+    private float mMenuTextPaddingRight = 10.0f; // 10dp
+
+    private float mMenuTextPaddingTop = 5.0f; // 5dp
+
+    private float mMenuTextPaddingBottom = 5.0f; // 5dp
+
+    private float mMenuTextSize = 14.0f; // 14sp
+
+    private int mDividerColor = Color.GRAY;
+
+    private int mExpandableIcon = R.drawable.ic_expandable_arrow;
+
+    private int mMenuTextColor = Color.BLACK;
+
+    private int mHorizontalMenuBackgroundRes = R.drawable.shape_default_menu;
+
+    private int mVerticalMenuBackgroundRes = R.drawable.shape_default_menu;
 
     private static final String TAG = "PopMenuLayout";
 
@@ -73,6 +99,7 @@ public class PopMenuLayout extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr){
+        initAttrs(context, attrs, defStyleAttr);
         mMenuShow = new boolean[SUPPORT_MENU_LEVEL];
         for (int i = 0; i < SUPPORT_MENU_LEVEL; i++) {
             mMenuShow[i] = i == 0;
@@ -80,12 +107,14 @@ public class PopMenuLayout extends RelativeLayout {
         mContext = context;
         mMenus = new ArrayList<MenuBean>();
         m1LevelMenuAdapter = new MenuAdapter(mContext, mMenus, mLayoutManagerOrientation);
+        m1LevelMenuAdapter.setMenuHeight((int) mLevel1MenuItemHeight);
         m1LevelMenuAdapter.setOnMenuClickListener(new OnMenuClickListener() {
             @Override
             public void onMenuClick(int level1Index, int level2Index, int level3Index) {
                 dealMenuClickEvent(level1Index, level2Index, level3Index);
             }
         });
+        invalidatView();
 
         recyclerView = new RecyclerView(mContext, attrs, defStyleAttr);
         mLayoutManager = new LinearLayoutManager(mContext);
@@ -98,6 +127,49 @@ public class PopMenuLayout extends RelativeLayout {
         recyclerView.setLayoutParams(params);
 
         addView(recyclerView);
+    }
+
+    private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr){
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.PopMenuLayout,
+                defStyleAttr, 0);
+        mConfigJson = attributes.getString(R.styleable.PopMenuLayout_config_json);
+        mLevel2MenuAnimStyle = attributes.getInteger(
+                R.styleable.PopMenuLayout_level2_menu_anim_style, mLevel2MenuAnimStyle);
+        mLevel1MenuItemHeight = attributes.getDimension(
+                R.styleable.PopMenuLayout_level1_menu_item_height,
+                Util.dp2px(context, mLevel1MenuItemHeight));
+        mChildMenuItemHeight = attributes.getDimension(
+                R.styleable.PopMenuLayout_child_menu_item_height,
+                Util.dp2px(context, mChildMenuItemHeight));
+        isWithLevel1MenuWidth = attributes.getBoolean(
+                R.styleable.PopMenuLayout_cmenu_w_follow_level1_menu, isWithLevel1MenuWidth);
+        mMenuDividerDp = attributes.getDimension(
+                R.styleable.PopMenuLayout_menu_divider_width, Util.dp2px(context, mMenuDividerDp));
+        mMenuTextPaddingLeft = attributes.getDimension(
+                R.styleable.PopMenuLayout_menu_left_padding,
+                Util.dp2px(context, mMenuTextPaddingLeft));
+        mMenuTextPaddingRight = attributes.getDimension(
+                        R.styleable.PopMenuLayout_menu_right_padding,
+                Util.dp2px(context, mMenuTextPaddingRight));
+        mMenuTextPaddingTop = attributes.getDimension(
+                R.styleable.PopMenuLayout_menu_top_padding,
+                Util.dp2px(context, mMenuTextPaddingTop));
+        mMenuTextPaddingBottom = attributes.getDimension(
+                        R.styleable.PopMenuLayout_menu_bottom_padding,
+                Util.dp2px(context, mMenuTextPaddingBottom));
+        mDividerColor = attributes.getColor(R.styleable.PopMenuLayout_menu_divider_color,
+                mDividerColor);
+        mExpandableIcon = attributes.getInt(R.styleable.PopMenuLayout_menu_expandable_icon,
+                mExpandableIcon);
+        mMenuTextColor = attributes.getColor(R.styleable.PopMenuLayout_menu_text_color,
+                mMenuTextColor);
+        mHorizontalMenuBackgroundRes = attributes.getInteger(
+                R.styleable.PopMenuLayout_horizontal_menu_bg, mHorizontalMenuBackgroundRes);
+        mVerticalMenuBackgroundRes = attributes.getInteger(
+                R.styleable.PopMenuLayout_vertical_menu_bg, mVerticalMenuBackgroundRes);
+        mMenuTextSize = attributes.getFloat(R.styleable.PopMenuLayout_menu_text_size,
+                mMenuTextSize);
+        attributes.recycle();
     }
 
     @Override
@@ -181,7 +253,7 @@ public class PopMenuLayout extends RelativeLayout {
         int[] location = new int[2];
         recyclerView.getLocationOnScreen(location);
         List<MenuBean> menus = mMenus.get(level1Index).getChild();
-        popMenuView.setAnimationStyle(mLevel2MenuAnimStyle);
+        popMenuView.setAnimStyle(mLevel2MenuAnimStyle);
         popMenuView.setMenus(menus);
         popMenuView.showAtLocation(recyclerView, Gravity.NO_GRAVITY,
                 mWidth / mMenus.size() * level1Index +
@@ -208,6 +280,7 @@ public class PopMenuLayout extends RelativeLayout {
 
         if (popMenuView == null){
             popMenuView = new PopMenuView(mContext, this, mWidth / SUPPORT_MENU_LEVEL, -1);
+            popMenuView.setMenuItemHeight(mChildMenuItemHeight);
             popMenuView.setOnMenuClickListener(new OnMenuClickListener() {
                 @Override
                 public void onMenuClick(int level1Index, int level2Index, int level3Index) {
@@ -216,6 +289,39 @@ public class PopMenuLayout extends RelativeLayout {
                     }
                 }
             });
+            invalidatView();
+        }
+    }
+    
+    private void invalidatView(){
+        if (m1LevelMenuAdapter != null){
+            m1LevelMenuAdapter.setTextPaddingLeft(mMenuTextPaddingLeft);
+            m1LevelMenuAdapter.setTextPaddingBottom(mMenuTextPaddingBottom);
+            m1LevelMenuAdapter.setTextPaddingRight(mMenuTextPaddingRight);
+            m1LevelMenuAdapter.setTextPaddingTop(mMenuTextPaddingTop);
+            m1LevelMenuAdapter.setDividerDp(mMenuDividerDp);
+            m1LevelMenuAdapter.setDividerColor(mDividerColor);
+            m1LevelMenuAdapter.setExpandableIcon(mExpandableIcon);
+            m1LevelMenuAdapter.setMenuTextColor(mMenuTextColor);
+            m1LevelMenuAdapter.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
+            m1LevelMenuAdapter.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
+            m1LevelMenuAdapter.setMenuTextSize(mMenuTextSize);
+
+        }
+        if (popMenuView != null){
+            popMenuView.setWithLevel1MenuWidth(isWithLevel1MenuWidth);
+            popMenuView.setWithLevel1MenuWidth(isWithLevel1MenuWidth);
+            popMenuView.setMenuTextPaddingLeft(mMenuTextPaddingLeft);
+            popMenuView.setMenuTextPaddingBottom(mMenuTextPaddingBottom);
+            popMenuView.setMenuTextPaddingRight(mMenuTextPaddingRight);
+            popMenuView.setMenuTextPaddingTop(mMenuTextPaddingTop);
+            popMenuView.setMenuDividerDp(mMenuDividerDp);
+            popMenuView.setDividerColor(mDividerColor);
+            popMenuView.setExpandableIcon(mExpandableIcon);
+            popMenuView.setMenuTextColor(mMenuTextColor);
+            popMenuView.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
+            popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
+            popMenuView.setMenuTextSize(mMenuTextSize);
         }
     }
 
@@ -258,8 +364,8 @@ public class PopMenuLayout extends RelativeLayout {
         return mLayoutManagerOrientation;
     }
 
-    public void setLayoutManagerOrientation(int mLayoutManagerOrientation) {
-        this.mLayoutManagerOrientation = mLayoutManagerOrientation;
+    public void setLayoutManagerOrientation(int layoutManagerOrientation) {
+        this.mLayoutManagerOrientation = layoutManagerOrientation;
     }
 
     public List<MenuBean> getMenus() {
@@ -274,24 +380,131 @@ public class PopMenuLayout extends RelativeLayout {
         return mChildMenuItemHeight;
     }
 
-    public void setChildMenuItemHeight(float mChildMenuItemHeight) {
-        this.mChildMenuItemHeight = mChildMenuItemHeight;
+    public void setChildMenuItemHeight(float childMenuItemHeight) {
+        this.mChildMenuItemHeight = childMenuItemHeight;
     }
 
     public float getLevel1MenuItemHeight() {
-        return level1MenuItemHeight;
+        return mLevel1MenuItemHeight;
     }
 
     public void setLevel1MenuItemHeight(float level1MenuItemHeight) {
-        this.level1MenuItemHeight = level1MenuItemHeight;
+        this.mLevel1MenuItemHeight = level1MenuItemHeight;
     }
 
     public int getLevel2MenuAnimStyle() {
         return mLevel2MenuAnimStyle;
     }
 
-    public void setLevel2MenuAnimStyle(int mLevel2MenuAnimStyle) {
-        this.mLevel2MenuAnimStyle = mLevel2MenuAnimStyle;
+    public void setLevel2MenuAnimStyle(int level2MenuAnimStyle) {
+        this.mLevel2MenuAnimStyle = level2MenuAnimStyle;
+    }
+
+    public boolean isWithLevel1MenuWidth() {
+        return isWithLevel1MenuWidth;
+    }
+
+    public void setWithLevel1MenuWidth(boolean withLevel1MenuWidth) {
+        isWithLevel1MenuWidth = withLevel1MenuWidth;
+    }
+
+    public float getMenuTextPaddingBottom() {
+        return mMenuTextPaddingBottom;
+    }
+
+    public void setMenuTextPaddingBottom(float paddingBottom) {
+        this.mMenuTextPaddingBottom = paddingBottom;
+        invalidatView();
+    }
+
+    public float getMenuTextPaddingTop() {
+        return mMenuTextPaddingTop;
+    }
+
+    public void setMenuTextPaddingTop(float paddingTop) {
+        this.mMenuTextPaddingTop = paddingTop;
+        invalidatView();
+    }
+
+    public float getMenuTextPaddingRight() {
+        return mMenuTextPaddingRight;
+    }
+
+    public void setMenuTextPaddingRight(float paddingRight) {
+        this.mMenuTextPaddingRight = paddingRight;
+        invalidatView();
+    }
+
+    public float getMenuTextPaddingLeft() {
+        return mMenuTextPaddingLeft;
+    }
+
+    public void setMenuTextPaddingLeft(float paddingLeft) {
+        this.mMenuTextPaddingLeft = paddingLeft;
+        invalidatView();
+    }
+
+    public float getMenuDividerDp() {
+        return mMenuDividerDp;
+    }
+
+    public void setMenuDividerDp(float menuDividerDp) {
+        this.mMenuDividerDp = menuDividerDp;
+        invalidatView();
+    }
+
+    public int getDividerColor() {
+        return mDividerColor;
+    }
+
+    public void setDividerColor(int dividerColor) {
+        this.mDividerColor = dividerColor;
+        invalidatView();
+    }
+
+    public int getExpandableIcon() {
+        return mExpandableIcon;
+    }
+
+    public void setExpandableIcon(int expandableIcon) {
+        this.mExpandableIcon = expandableIcon;
+        invalidatView();
+    }
+
+    public int getMenuTextColor() {
+        return mMenuTextColor;
+    }
+
+    public void setMenuTextColor(int textColor) {
+        this.mMenuTextColor = textColor;
+        invalidatView();
+    }
+
+    public int getHorizontalMenuBackgroundRes() {
+        return mHorizontalMenuBackgroundRes;
+    }
+
+    public void setHorizontalMenuBackgroundRes(int horizontalMenuBackgroundRes) {
+        this.mHorizontalMenuBackgroundRes = horizontalMenuBackgroundRes;
+        invalidatView();
+    }
+
+    public int getVerticalMenuBackgroundRes() {
+        return mVerticalMenuBackgroundRes;
+    }
+
+    public void setVerticalMenuBackgroundRes(int verticalMenuBackgroundRes) {
+        this.mVerticalMenuBackgroundRes = verticalMenuBackgroundRes;
+        invalidatView();
+    }
+
+    public float getMenuTextSize() {
+        return mMenuTextSize;
+    }
+
+    public void setMenuTextSize(float textSize) {
+        this.mMenuTextSize = textSize;
+        invalidatView();
     }
 
 }

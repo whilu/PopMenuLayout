@@ -72,6 +72,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         this.mMenuWidth = width;
         this.mMenuHeight = height;
         this.mLayoutManagerOrientation = orientation;
+        this.mTextPaddingLeft = Util.dp2px(mContext, mTextPaddingLeft);
+        this.mTextPaddingTop = Util.dp2px(mContext, mTextPaddingTop);
+        this.mTextPaddingRight = Util.dp2px(mContext, mTextPaddingRight);
+        this.mTextPaddingBottom = Util.dp2px(mContext, mTextPaddingBottom);
+        this.mDividerDp = Util.dp2px(mContext, mDividerDp);
     }
 
     @Override
@@ -102,11 +107,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         holder.tvMenuText.setTextColor(mMenuTextColor);
         holder.tvMenuText.setTextSize(mMenuTextSize);
         holder.tvMenuText.setText(menu.getText());
-        holder.tvMenuText.setPadding(
-                (int) Util.dp2px(mContext, mTextPaddingLeft),
-                (int) Util.dp2px(mContext, mTextPaddingTop),
-                (int) Util.dp2px(mContext, mTextPaddingRight),
-                (int) Util.dp2px(mContext, mTextPaddingBottom));
+        holder.tvMenuText.setPadding((int) mTextPaddingLeft, (int) mTextPaddingTop,
+                (int) mTextPaddingRight, (int) mTextPaddingBottom);
 
         if (menu.isExpandable()){
             holder.ivMenuIcon.setImageResource(mExpandableIcon);
@@ -121,7 +123,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
             RelativeLayout.LayoutParams dividerRightParams = (RelativeLayout.LayoutParams)
                     holder.viewDividerRight.getLayoutParams();
-            dividerRightParams.width = (int) Util.dp2px(mContext, mDividerDp);
+            dividerRightParams.width = (int) mDividerDp;
             holder.viewDividerRight.setLayoutParams(dividerRightParams);
             holder.viewDividerRight.setVisibility(position == mMenus.size() - 1 ?
                     View.GONE : View.VISIBLE);
@@ -131,7 +133,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
             RelativeLayout.LayoutParams bottomRightParams = (RelativeLayout.LayoutParams)
                     holder.viewDividerBottom.getLayoutParams();
-            bottomRightParams.height = (int) Util.dp2px(mContext, mDividerDp);
+            bottomRightParams.height = (int) mDividerDp;
             holder.viewDividerBottom.setLayoutParams(bottomRightParams);
             holder.viewDividerBottom.setVisibility(position == mMenus.size() - 1 ?
                     View.GONE : View.VISIBLE);
@@ -231,7 +233,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     }
 
     public float getTextPaddingBottom() {
-        return Util.dp2px(mContext, mTextPaddingBottom);
+        return mTextPaddingBottom;
     }
 
     public void setTextPaddingBottom(float mTextPaddingBottom) {
@@ -239,7 +241,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     }
 
     public float getTextPaddingTop() {
-        return Util.dp2px(mContext, mTextPaddingTop);
+        return mTextPaddingTop;
     }
 
     public void setTextPaddingTop(float mTextPaddingTop) {
@@ -247,7 +249,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     }
 
     public float getTextPaddingRight() {
-        return Util.dp2px(mContext, mTextPaddingRight);
+        return mTextPaddingRight;
     }
 
     public void setTextPaddingRight(float mTextPaddingRight) {
@@ -255,7 +257,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     }
 
     public float getTextPaddingLeft() {
-        return Util.dp2px(mContext, mTextPaddingLeft);
+        return mTextPaddingLeft;
     }
 
     public void setTextPaddingLeft(float mTextPaddingLeft) {
