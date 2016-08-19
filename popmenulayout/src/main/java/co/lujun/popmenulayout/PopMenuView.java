@@ -83,6 +83,8 @@ public class PopMenuView extends PopupWindow {
 
     private int mVerticalMenuBackgroundRes = R.drawable.shape_default_menu;
 
+    private int mMaxMenuItemCount = 4;
+
     private static final String TAG = "PopMenuView";
 
     public PopMenuView(Context context, PopMenuLayout popMenuLayout, int mWidth, int mHeight){
@@ -187,7 +189,9 @@ public class PopMenuView extends PopupWindow {
             }else {
                 showX = location[0] + mRootView.getWidth();
             }
-            showY = location[1] + (level2Index - menus.size() + 1) * (int) mMenuItemHeight;
+            LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+            int currentIndexTop = manager.findViewByPosition(level2Index).getTop();
+            showY = location[1] + (currentIndexTop + (1 - menus.size()) * (int) mMenuItemHeight);
             popMenuView.showAtLocation(mPopMenuLayout, Gravity.NO_GRAVITY, showX, showY);
         }else {
             if (mOnMenuClickListener != null){
@@ -211,6 +215,7 @@ public class PopMenuView extends PopupWindow {
         popMenuView.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
         popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
         popMenuView.setMenuTextSize(mMenuTextSize);
+        popMenuView.setMaxMenuItemCount(mMaxMenuItemCount);
     }
 
     private int getSuitableWidth(List<MenuBean> menus){
@@ -251,7 +256,8 @@ public class PopMenuView extends PopupWindow {
     public void setMenus(List<MenuBean> menus) {
         int suitW = getSuitableWidth(menus);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mCardView.getLayoutParams();
-        params.height = menus.size() * (int) mMenuItemHeight;
+        params.height = (menus.size() <= mMaxMenuItemCount ?
+                menus.size() : mMaxMenuItemCount) * (int) mMenuItemHeight;
         params.width = suitW;
         mCardView.setLayoutParams(params);
         mMenuAdapter.setMenuWidth(suitW);
@@ -415,5 +421,13 @@ public class PopMenuView extends PopupWindow {
     public void setVerticalMenuBackgroundRes(int verticalMenuBackgroundRes) {
         this.mVerticalMenuBackgroundRes = verticalMenuBackgroundRes;
         mMenuAdapter.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
+    }
+
+    public int getMaxMenuItemCount() {
+        return mMaxMenuItemCount;
+    }
+
+    public void setMaxMenuItemCount(int maxMenuItemCount) {
+        this.mMaxMenuItemCount = maxMenuItemCount;
     }
 }

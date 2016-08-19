@@ -16,7 +16,7 @@
     <co.lujun.popmenulayout.PopMenuLayout
         android:id="@+id/popMenuLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <!--<co.lujun.popmenulayout.PopMenuLayout
         android:id="@+id/popMenuLayout"
@@ -36,5 +36,6 @@
         app:menu_left_padding="0dp"
         app:menu_right_padding="0dp"
         app:menu_top_padding="0dp"
-        app:menu_bottom_padding="0dp"/>-->
+        app:menu_bottom_padding="0dp"
+        app:child_menu_max_count="5"/>-->
 </RelativeLayout>

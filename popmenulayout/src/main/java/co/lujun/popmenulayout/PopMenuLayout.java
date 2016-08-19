@@ -83,6 +83,8 @@ public class PopMenuLayout extends RelativeLayout {
 
     private int mVerticalMenuBackgroundRes = R.drawable.shape_default_menu;
 
+    private int mMaxMenuItemCount = 4;
+
     private static final String TAG = "PopMenuLayout";
 
     public PopMenuLayout(Context context) {
@@ -169,6 +171,8 @@ public class PopMenuLayout extends RelativeLayout {
                 R.styleable.PopMenuLayout_vertical_menu_bg, mVerticalMenuBackgroundRes);
         mMenuTextSize = attributes.getDimension(R.styleable.PopMenuLayout_menu_text_size,
                 Util.sp2px(context, mMenuTextSize));
+        mMaxMenuItemCount = attributes.getInteger(R.styleable.PopMenuLayout_child_menu_max_count,
+                mMaxMenuItemCount);
         attributes.recycle();
     }
 
@@ -258,7 +262,8 @@ public class PopMenuLayout extends RelativeLayout {
         popMenuView.showAtLocation(recyclerView, Gravity.NO_GRAVITY,
                 mWidth / mMenus.size() * level1Index +
                         (mWidth / mMenus.size() - popMenuView.getWidth()) / 2,
-                location[1] - menus.size() * (int) mChildMenuItemHeight);
+                location[1] - (menus.size() <= mMaxMenuItemCount ?
+                        menus.size()  : mMaxMenuItemCount) * (int) mChildMenuItemHeight);
     }
 
     private void dealClickEventOnly(int level1Index, int level2Index, int level3Index){
@@ -320,6 +325,7 @@ public class PopMenuLayout extends RelativeLayout {
             popMenuView.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
             popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
             popMenuView.setMenuTextSize(mMenuTextSize);
+            popMenuView.setMaxMenuItemCount(mMaxMenuItemCount);
         }
     }
 
@@ -508,6 +514,14 @@ public class PopMenuLayout extends RelativeLayout {
     public void setMenuTextSize(float textSize) {
         this.mMenuTextSize = textSize;
         invalidateView();
+    }
+
+    public int getMaxMenuItemCount() {
+        return mMaxMenuItemCount;
+    }
+
+    public void setMaxMenuItemCount(int maxMenuItemCount) {
+        this.mMaxMenuItemCount = maxMenuItemCount;
     }
 
 }
