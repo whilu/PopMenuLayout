@@ -1,3 +1,27 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2016 lujun
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package co.lujun.popmenulayout.adapter;
 
 import android.content.Context;
@@ -48,17 +72,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     private int mVerticalMenuBackgroundRes = R.drawable.shape_default_menu;
 
-    private float mMenuTextSize = 14.0f; // 14sp
+    private float mMenuTextSize = 14.0f; // default  14sp
 
-    private float mDividerDp = 1.0f;
+    private float mDividerDp = 1.0f; //  default 1dp
 
-    private float mTextPaddingLeft = 10.0f; // 10dp
+    private float mTextPaddingLeft = 10.0f; // default  10dp
 
-    private float mTextPaddingRight = 10.0f; // 10dp
+    private float mTextPaddingRight = 10.0f; // default  10dp
 
-    private float mTextPaddingTop = 5.0f; // 5dp
+    private float mTextPaddingTop = 5.0f; // default  5dp
 
-    private float mTextPaddingBottom = 5.0f; // 5dp
+    private float mTextPaddingBottom = 5.0f; // default  5dp
 
     private static final String TAG = "MenuAdapter";
 
@@ -94,7 +118,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     @Override
     public void onBindViewHolder(MenuViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder");
         final MenuBean menu = mMenus.get(position);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                 holder.rlRootView.getLayoutParams();

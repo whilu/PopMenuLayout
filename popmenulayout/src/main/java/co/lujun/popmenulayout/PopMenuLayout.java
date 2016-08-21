@@ -1,3 +1,27 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2016 lujun
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package co.lujun.popmenulayout;
 
 import android.content.Context;
@@ -28,9 +52,7 @@ import co.lujun.popmenulayout.adapter.MenuAdapter;
 public class PopMenuLayout extends RelativeLayout {
 
     private Context mContext;
-
-    private String mConfigJson;
-
+    
     private List<MenuBean> mMenus;
 
     private MenuAdapter m1LevelMenuAdapter;
@@ -43,47 +65,109 @@ public class PopMenuLayout extends RelativeLayout {
 
     private PopMenuView popMenuView;
 
+    /**
+     * Config json string to make menus
+     */
+    private String mConfigJson;
+
+    /**
+     * The orientation for Level 1 menu's LayoutManager.
+     */
     private int mLayoutManagerOrientation = LinearLayoutManager.HORIZONTAL;
 
-    private int mWidth; // PopMenuLayout width
+    /**
+     *  PopMenuLayout width.
+     */
+    private int mWidth;
 
-    private int mHeight; // PopMenuLayout height
+    /**
+     * PopMenuLayout height.
+     */
+    private int mHeight;
 
+    /**
+     * Animation style to use when the child popup menu appears and disappears.
+     */
     private int mLevel2MenuAnimStyle = -1;
 
-    private boolean[] mMenuShow;
-
+    /**
+     * Level 1 menu height, default 50(dp)
+     */
     private float mLevel1MenuItemHeight = 50.0f;
 
+    /**
+     * Child popup menu height, default 50(dp)
+     */
     private float mChildMenuItemHeight = 50.0f;
 
+    /**
+     * Whether the child popup menu's width always equals to level 1 menu's width.
+     */
     private boolean isWithLevel1MenuWidth = false;
 
-    private static final int SUPPORT_MENU_LEVEL = 3;
-
+    /**
+     * The divider width(height) between menus, default 1(dp)
+     */
     private float mMenuDividerDp = 1.0f;
 
-    private float mMenuTextPaddingLeft = 10.0f; // 10dp
+    /**
+     * The left padding for menu's content text, default 10(dp).
+     */
+    private float mMenuTextPaddingLeft = 10.0f;
 
-    private float mMenuTextPaddingRight = 10.0f; // 10dp
+    /**
+     * The right padding for menu's content text, default 10(dp).
+     */
+    private float mMenuTextPaddingRight = 10.0f;
 
-    private float mMenuTextPaddingTop = 5.0f; // 5dp
+    /**
+     * The top padding for menu's content text, default 5(dp).
+     */
+    private float mMenuTextPaddingTop = 5.0f;
 
-    private float mMenuTextPaddingBottom = 5.0f; // 5dp
+    /**
+     * The bottom padding for menu's content text, default 5(dp).
+     */
+    private float mMenuTextPaddingBottom = 5.0f;
 
-    private float mMenuTextSize = 14.0f; // 14sp
+    /**
+     * The text size for menu's content text, default 14(sp).
+     */
+    private float mMenuTextSize = 14.0f;
 
+    /**
+     * The divider color between menus, default Color.GRAY.
+     */
     private int mDividerColor = Color.GRAY;
 
+    /**
+     * The icon for expandable menu.
+     */
     private int mExpandableIcon = R.drawable.ic_expandable_arrow;
 
+    /**
+     * The text color for menu, default Color.BLACK.
+     */
     private int mMenuTextColor = Color.BLACK;
 
+    /**
+     * The background resource for Level 1 menu.
+     */
     private int mHorizontalMenuBackgroundRes = R.drawable.shape_default_menu;
 
+    /**
+     * The background resource for child menus.
+     */
     private int mVerticalMenuBackgroundRes = R.drawable.shape_default_menu;
 
+    /**
+     * The max size for child menu item, default 4.
+     */
     private int mMaxMenuItemCount = 4;
+
+    private boolean[] mMenuShow;
+    
+    private static final int SUPPORT_MENU_LEVEL = 3;
 
     private static final String TAG = "PopMenuLayout";
 
@@ -116,7 +200,7 @@ public class PopMenuLayout extends RelativeLayout {
                 dealMenuClickEvent(level1Index, level2Index, level3Index);
             }
         });
-        invalidateView();
+        invalidateViewsAttr();
 
         recyclerView = new RecyclerView(mContext, attrs, defStyleAttr);
         mLayoutManager = new LinearLayoutManager(mContext);
@@ -293,11 +377,11 @@ public class PopMenuLayout extends RelativeLayout {
                     }
                 }
             });
-            invalidateView();
+            invalidateViewsAttr();
         }
     }
     
-    private void invalidateView(){
+    private void invalidateViewsAttr(){
         if (m1LevelMenuAdapter != null){
             m1LevelMenuAdapter.setTextPaddingLeft(mMenuTextPaddingLeft);
             m1LevelMenuAdapter.setTextPaddingBottom(mMenuTextPaddingBottom);
@@ -331,8 +415,10 @@ public class PopMenuLayout extends RelativeLayout {
 
     private void invalidateData(){
         try {
-            mMenus.clear();
-            parseJson();
+            if (mMenus.size() <= 0){
+//                mMenus.clear();
+                parseJson();
+            }
             m1LevelMenuAdapter.setMenuWidth(mWidth / (mMenus.size() > 0 ? mMenus.size() : 1));
             recyclerView.setAdapter(m1LevelMenuAdapter);
             m1LevelMenuAdapter.notifyDataSetChanged();
@@ -361,10 +447,20 @@ public class PopMenuLayout extends RelativeLayout {
         return mConfigJson;
     }
 
+    /**
+     * Set the config json for PopMenuLayout.
+     *
+     * @param configJson
+     */
     public void setConfigJson(String configJson) {
         this.mConfigJson = configJson;
     }
 
+    /**
+     * Set the click listener for every menu.
+     *
+     * @param listener
+     */
     public void setOnMenuClickListener(OnMenuClickListener listener){
         this.mOnMenuClickListener = listener;
     }
@@ -373,6 +469,11 @@ public class PopMenuLayout extends RelativeLayout {
         return mLayoutManagerOrientation;
     }
 
+    /**
+     * Sets the orientation of the level 1 menu layout.
+     *
+     * @param layoutManagerOrientation
+     */
     public void setLayoutManagerOrientation(int layoutManagerOrientation) {
         this.mLayoutManagerOrientation = layoutManagerOrientation;
     }
@@ -381,6 +482,12 @@ public class PopMenuLayout extends RelativeLayout {
         return mMenus;
     }
 
+    /**
+     * Set the menus with MenuBean object to make PopMenuLayout.
+     *
+     * @param mMenus
+     * @see #setConfigJson(String)
+     */
     public void setMenus(List<MenuBean> mMenus) {
         this.mMenus = mMenus;
     }
@@ -389,6 +496,10 @@ public class PopMenuLayout extends RelativeLayout {
         return mChildMenuItemHeight;
     }
 
+    /**
+     * Set the child popup menu's height.
+     * @param childMenuItemHeight
+     */
     public void setChildMenuItemHeight(float childMenuItemHeight) {
         this.mChildMenuItemHeight = childMenuItemHeight;
     }
@@ -397,6 +508,11 @@ public class PopMenuLayout extends RelativeLayout {
         return mLevel1MenuItemHeight;
     }
 
+    /**
+     * Set the level 1 menu's height.
+     *
+     * @param level1MenuItemHeight
+     */
     public void setLevel1MenuItemHeight(float level1MenuItemHeight) {
         this.mLevel1MenuItemHeight = level1MenuItemHeight;
     }
@@ -405,6 +521,13 @@ public class PopMenuLayout extends RelativeLayout {
         return mLevel2MenuAnimStyle;
     }
 
+    /**
+     * Set the animation style resource for the child popup menu.
+     *
+     * @param level2MenuAnimStyle animation style to use when the child popup menu appears
+     *        and disappears.  Set to -1 for the default animation, 0 for no
+     *        animation, or a resource identifier for an explicit animation.
+     */
     public void setLevel2MenuAnimStyle(int level2MenuAnimStyle) {
         this.mLevel2MenuAnimStyle = level2MenuAnimStyle;
     }
@@ -413,6 +536,10 @@ public class PopMenuLayout extends RelativeLayout {
         return isWithLevel1MenuWidth;
     }
 
+    /**
+     * Set whether child popup menu's width always equals to level 1 menu's width.
+     * @param withLevel1MenuWidth
+     */
     public void setWithLevel1MenuWidth(boolean withLevel1MenuWidth) {
         isWithLevel1MenuWidth = withLevel1MenuWidth;
     }
@@ -421,105 +548,153 @@ public class PopMenuLayout extends RelativeLayout {
         return mMenuTextPaddingBottom;
     }
 
+    /**
+     * Set the content text's bottom padding.
+     * @param paddingBottom
+     */
     public void setMenuTextPaddingBottom(float paddingBottom) {
         this.mMenuTextPaddingBottom = paddingBottom;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public float getMenuTextPaddingTop() {
         return mMenuTextPaddingTop;
     }
 
+    /**
+     * Set the content text's top padding.
+     * @param paddingTop
+     */
     public void setMenuTextPaddingTop(float paddingTop) {
         this.mMenuTextPaddingTop = paddingTop;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public float getMenuTextPaddingRight() {
         return mMenuTextPaddingRight;
     }
 
+    /**
+     * Set the content text's right padding.
+     * @param paddingRight
+     */
     public void setMenuTextPaddingRight(float paddingRight) {
         this.mMenuTextPaddingRight = paddingRight;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public float getMenuTextPaddingLeft() {
         return mMenuTextPaddingLeft;
     }
 
+    /**
+     * Set the content text's left padding.
+     * @param paddingLeft
+     */
     public void setMenuTextPaddingLeft(float paddingLeft) {
         this.mMenuTextPaddingLeft = paddingLeft;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public float getMenuDividerDp() {
         return mMenuDividerDp;
     }
 
+    /**
+     * Set divider width(height) between menus.
+     * @param menuDividerDp
+     */
     public void setMenuDividerDp(float menuDividerDp) {
         this.mMenuDividerDp = menuDividerDp;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public int getDividerColor() {
         return mDividerColor;
     }
 
+    /**
+     * Set the color of menu's divider.
+     * @param dividerColor
+     */
     public void setDividerColor(int dividerColor) {
         this.mDividerColor = dividerColor;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public int getExpandableIcon() {
         return mExpandableIcon;
     }
 
+    /**
+     * Set the icon resource for the expandable menu.
+     * @param expandableIcon
+     */
     public void setExpandableIcon(int expandableIcon) {
         this.mExpandableIcon = expandableIcon;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public int getMenuTextColor() {
         return mMenuTextColor;
     }
 
+    /**
+     * Set the menu's text color.
+     * @param textColor
+     */
     public void setMenuTextColor(int textColor) {
         this.mMenuTextColor = textColor;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public int getHorizontalMenuBackgroundRes() {
         return mHorizontalMenuBackgroundRes;
     }
 
+    /**
+     * Set the level 1 menu's background resource.
+     * @param horizontalMenuBackgroundRes
+     */
     public void setHorizontalMenuBackgroundRes(int horizontalMenuBackgroundRes) {
         this.mHorizontalMenuBackgroundRes = horizontalMenuBackgroundRes;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public int getVerticalMenuBackgroundRes() {
         return mVerticalMenuBackgroundRes;
     }
 
+    /**
+     * Set the child popup menu's background resource.
+     * @param verticalMenuBackgroundRes
+     */
     public void setVerticalMenuBackgroundRes(int verticalMenuBackgroundRes) {
         this.mVerticalMenuBackgroundRes = verticalMenuBackgroundRes;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public float getMenuTextSize() {
         return mMenuTextSize;
     }
 
+    /**
+     * Set the menu's text size.
+     * @param textSize
+     */
     public void setMenuTextSize(float textSize) {
         this.mMenuTextSize = textSize;
-        invalidateView();
+        invalidateViewsAttr();
     }
 
     public int getMaxMenuItemCount() {
         return mMaxMenuItemCount;
     }
 
+    /**
+     * Set the max show count of child popup menu layout.
+     * @param maxMenuItemCount
+     */
     public void setMaxMenuItemCount(int maxMenuItemCount) {
         this.mMaxMenuItemCount = maxMenuItemCount;
     }
