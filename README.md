@@ -6,7 +6,7 @@ A multi level menu view(like WeChat subscription Accounts) library for Android.
 
 ## Screenshots
 
-<img src="/screenshots/device-2016-08-22-232610.png" alt="screenshots/device-2016-08-22-232610.png" width="270" height="486" /><img src="/screenshots/device-2016-08-22-232719.png" alt="screenshots/device-2016-08-22-232719.png" width="270" height="486" /> <img src="/screenshots/device-2016-08-22-232953.png" alt="screenshots/device-2016-08-22-232953.png" width="270" height="486" /> 
+<img src="/screenshots/device-2016-08-22-232610.png" alt="screenshots/device-2016-08-22-232610.png" width="270" height="486" /> <img src="/screenshots/device-2016-08-22-232719.png" alt="screenshots/device-2016-08-22-232719.png" width="270" height="486" /> <img src="/screenshots/device-2016-08-22-232953.png" alt="screenshots/device-2016-08-22-232953.png" width="270" height="486" /> 
 
 ## Usage
 
