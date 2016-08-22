@@ -72,17 +72,25 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     private int mVerticalMenuBackgroundRes = R.drawable.shape_default_menu;
 
-    private float mMenuTextSize = 14.0f; // default  14sp
+    private float mMenuTextSize = 14.0f;
 
-    private float mDividerDp = 1.0f; //  default 1dp
+    private float mDividerDp = 1.0f;
 
-    private float mTextPaddingLeft = 10.0f; // default  10dp
+    private float mTextPaddingLeft = 10.0f;
 
-    private float mTextPaddingRight = 10.0f; // default  10dp
+    private float mTextPaddingRight = 10.0f;
 
-    private float mTextPaddingTop = 5.0f; // default  5dp
+    private float mTextPaddingTop = 5.0f;
 
-    private float mTextPaddingBottom = 5.0f; // default  5dp
+    private float mTextPaddingBottom = 5.0f;
+
+    private float mDividerMarginLeft = 0.0f;
+
+    private float mDividerMarginRight = 0.0f;
+
+    private float mDividerMarginTop = 0.0f;
+
+    private float mDividerMarginBottom = 0.0f;
 
     private static final String TAG = "MenuAdapter";
 
@@ -103,6 +111,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         this.mTextPaddingBottom = Util.dp2px(mContext, mTextPaddingBottom);
         this.mDividerDp = Util.dp2px(mContext, mDividerDp);
         this.mMenuTextSize = Util.sp2px(mContext, mMenuTextSize);
+        this.mDividerMarginLeft = Util.dp2px(mContext, mDividerMarginLeft);
+        this.mDividerMarginRight = Util.dp2px(mContext, mDividerMarginRight);
+        this.mDividerMarginTop = Util.dp2px(mContext, mDividerMarginTop);
+        this.mDividerMarginBottom = Util.dp2px(mContext, mDividerMarginBottom);
     }
 
     @Override
@@ -149,6 +161,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             RelativeLayout.LayoutParams dividerRightParams = (RelativeLayout.LayoutParams)
                     holder.viewDividerRight.getLayoutParams();
             dividerRightParams.width = (int) mDividerDp;
+            dividerRightParams.setMargins(dividerRightParams.leftMargin, (int) mDividerMarginTop,
+                    dividerRightParams.rightMargin, (int) mDividerMarginBottom);
             holder.viewDividerRight.setLayoutParams(dividerRightParams);
             holder.viewDividerRight.setBackgroundColor(mDividerColor);
             holder.viewDividerRight.setVisibility(position == mMenus.size() - 1 ?
@@ -160,6 +174,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             RelativeLayout.LayoutParams bottomRightParams = (RelativeLayout.LayoutParams)
                     holder.viewDividerBottom.getLayoutParams();
             bottomRightParams.height = (int) mDividerDp;
+            bottomRightParams.setMargins((int) mDividerMarginLeft, bottomRightParams.topMargin,
+                    (int) mDividerMarginRight, bottomRightParams.bottomMargin);
             holder.viewDividerBottom.setLayoutParams(bottomRightParams);
             holder.viewDividerBottom.setBackgroundColor(mDividerColor);
             holder.viewDividerBottom.setVisibility(position == mMenus.size() - 1 ?
@@ -289,6 +305,38 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     public void setTextPaddingLeft(float mTextPaddingLeft) {
         this.mTextPaddingLeft = mTextPaddingLeft;
+    }
+
+    public float getDividerMarginBottom() {
+        return mDividerMarginBottom;
+    }
+
+    public void setDividerMarginBottom(float dividerMarginBottom) {
+        this.mDividerMarginBottom = dividerMarginBottom;
+    }
+
+    public float getDividerMarginTop() {
+        return mDividerMarginTop;
+    }
+
+    public void setDividerMarginTop(float dividerMarginTop) {
+        this.mDividerMarginTop = dividerMarginTop;
+    }
+
+    public float getDividerMarginRight() {
+        return mDividerMarginRight;
+    }
+
+    public void setDividerMarginRight(float dividerMarginRight) {
+        this.mDividerMarginRight = dividerMarginRight;
+    }
+
+    public float getDividerMarginLeft() {
+        return mDividerMarginLeft;
+    }
+
+    public void setDividerMarginLeft(float dividerMarginLeft) {
+        this.mDividerMarginLeft = dividerMarginLeft;
     }
 
     static class MenuViewHolder extends RecyclerView.ViewHolder{

@@ -91,12 +91,12 @@ public class PopMenuLayout extends RelativeLayout {
     private int mLevel2MenuAnimStyle = -1;
 
     /**
-     * Level 1 menu height, default 50(dp)
+     * Level 1 menu height, default 50(dp).
      */
     private float mLevel1MenuItemHeight = 50.0f;
 
     /**
-     * Child popup menu height, default 50(dp)
+     * Child popup menu height, default 50(dp).
      */
     private float mChildMenuItemHeight = 50.0f;
 
@@ -106,7 +106,7 @@ public class PopMenuLayout extends RelativeLayout {
     private boolean isWithLevel1MenuWidth = false;
 
     /**
-     * The divider width(height) between menus, default 1(dp)
+     * The divider width(height) between menus, default 1(dp).
      */
     private float mMenuDividerDp = 1.0f;
 
@@ -151,6 +151,16 @@ public class PopMenuLayout extends RelativeLayout {
     private int mMenuTextColor = Color.BLACK;
 
     /**
+     * The child menu's container layout background color(default white).
+     */
+    private int mChildMenuLayoutBgColor = Color.WHITE;
+
+    /**
+     * The level 1 menu's container layout background color(default white).
+     */
+    private int mLevel1MenuLayoutBgColor = Color.WHITE;
+
+    /**
      * The background resource for Level 1 menu.
      */
     private int mHorizontalMenuBackgroundRes = R.drawable.shape_default_menu;
@@ -164,6 +174,26 @@ public class PopMenuLayout extends RelativeLayout {
      * The max size for child menu item, default 4.
      */
     private int mMaxMenuItemCount = 4;
+
+    /**
+     * Divider margin left, default 0(dp).
+     */
+    private float mDividerMarginLeft = 0.0f;
+
+    /**
+     * Divider margin right, default 0(dp).
+     */
+    private float mDividerMarginRight = 0.0f;
+
+    /**
+     * Divider margin top, default 0(dp).
+     */
+    private float mDividerMarginTop = 0.0f;
+
+    /**
+     * Divider margin bottom, default 0(dp).
+     */
+    private float mDividerMarginBottom = 0.0f;
 
     private boolean[] mMenuShow;
     
@@ -206,6 +236,7 @@ public class PopMenuLayout extends RelativeLayout {
         mLayoutManager = new LinearLayoutManager(mContext);
         mLayoutManager.setOrientation(mLayoutManagerOrientation);
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setBackgroundColor(mLevel1MenuLayoutBgColor);
 
         LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
@@ -257,6 +288,20 @@ public class PopMenuLayout extends RelativeLayout {
                 Util.sp2px(context, mMenuTextSize));
         mMaxMenuItemCount = attributes.getInteger(R.styleable.PopMenuLayout_child_menu_max_count,
                 mMaxMenuItemCount);
+        mLevel1MenuLayoutBgColor = attributes.getColor(
+                R.styleable.PopMenuLayout_level1_menu_layout_bg_color, mLevel1MenuLayoutBgColor);
+        mChildMenuLayoutBgColor = attributes.getColor(
+                R.styleable.PopMenuLayout_cmenu_layout_bg_color, mChildMenuLayoutBgColor);
+        mDividerMarginLeft = attributes.getDimension(R.styleable.PopMenuLayout_divider_margin_left,
+                Util.dp2px(context, mDividerMarginLeft));
+        mDividerMarginRight = attributes.getDimension(
+                R.styleable.PopMenuLayout_divider_margin_right,
+                Util.dp2px(context, mDividerMarginRight));
+        mDividerMarginTop = attributes.getDimension(R.styleable.PopMenuLayout_divider_margin_top,
+                Util.dp2px(context, mDividerMarginTop));
+        mDividerMarginBottom = attributes.getDimension(
+                R.styleable.PopMenuLayout_divider_margin_bottom,
+                Util.dp2px(context, mDividerMarginBottom));
         attributes.recycle();
     }
 
@@ -394,6 +439,10 @@ public class PopMenuLayout extends RelativeLayout {
             m1LevelMenuAdapter.setHorizontalMenuBackgroundRes(mHorizontalMenuBackgroundRes);
             m1LevelMenuAdapter.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
             m1LevelMenuAdapter.setMenuTextSize(mMenuTextSize);
+            m1LevelMenuAdapter.setDividerMarginLeft(mDividerMarginLeft);
+            m1LevelMenuAdapter.setDividerMarginRight(mDividerMarginRight);
+            m1LevelMenuAdapter.setDividerMarginTop(mDividerMarginTop);
+            m1LevelMenuAdapter.setDividerMarginBottom(mDividerMarginBottom);
 
         }
         if (popMenuView != null){
@@ -410,6 +459,11 @@ public class PopMenuLayout extends RelativeLayout {
             popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
             popMenuView.setMenuTextSize(mMenuTextSize);
             popMenuView.setMaxMenuItemCount(mMaxMenuItemCount);
+            popMenuView.setMenuLayoutBgColor(mChildMenuLayoutBgColor);
+            popMenuView.setDividerMarginLeft(mDividerMarginLeft);
+            popMenuView.setDividerMarginRight(mDividerMarginRight);
+            popMenuView.setDividerMarginTop(mDividerMarginTop);
+            popMenuView.setDividerMarginBottom(mDividerMarginBottom);
         }
     }
 
@@ -702,6 +756,84 @@ public class PopMenuLayout extends RelativeLayout {
      */
     public void setMaxMenuItemCount(int maxMenuItemCount) {
         this.mMaxMenuItemCount = maxMenuItemCount;
+    }
+
+    public int getChildMenuLayoutBgColor() {
+        return mChildMenuLayoutBgColor;
+    }
+
+    /**
+     * Set child menu's layout background color.
+     *
+     * @param childMenuLayoutBgColor
+     */
+    public void setChildMenuLayoutBgColor(int childMenuLayoutBgColor) {
+        this.mChildMenuLayoutBgColor = childMenuLayoutBgColor;
+    }
+
+    public int getLevel1MenuLayoutBgColor() {
+        return mLevel1MenuLayoutBgColor;
+    }
+
+    /**
+     * Set the level 1 menu's container layout background color.
+     *
+     * @param level1MenuLayoutBgColor
+     */
+    public void setLevel1MenuLayoutBgColor(int level1MenuLayoutBgColor) {
+        this.mLevel1MenuLayoutBgColor = level1MenuLayoutBgColor;
+    }
+
+    public float getDividerMarginBottom() {
+        return mDividerMarginBottom;
+    }
+
+    /**
+     * Set divider bottom margin.
+     *
+     * @param dividerMarginBottom
+     */
+    public void setDividerMarginBottom(float dividerMarginBottom) {
+        this.mDividerMarginBottom = dividerMarginBottom;
+    }
+
+    public float getDividerMarginTop() {
+        return mDividerMarginTop;
+    }
+
+    /**
+     * Set divider top margin.
+     *
+     * @param dividerMarginTop
+     */
+    public void setDividerMarginTop(float dividerMarginTop) {
+        this.mDividerMarginTop = dividerMarginTop;
+    }
+
+    public float getDividerMarginRight() {
+        return mDividerMarginRight;
+    }
+
+    /**
+     * Set divider right margin.
+     *
+     * @param dividerMarginRight
+     */
+    public void setDividerMarginRight(float dividerMarginRight) {
+        this.mDividerMarginRight = dividerMarginRight;
+    }
+
+    public float getDividerMarginLeft() {
+        return mDividerMarginLeft;
+    }
+
+    /**
+     * Set divider left margin.
+     *
+     * @param dividerMarginLeft
+     */
+    public void setDividerMarginLeft(float dividerMarginLeft) {
+        this.mDividerMarginLeft = dividerMarginLeft;
     }
 
 }

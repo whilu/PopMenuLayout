@@ -109,6 +109,16 @@ public class PopMenuView extends PopupWindow {
 
     private int mMaxMenuItemCount = 4;
 
+    private int mMenuLayoutBgColor = Color.WHITE;
+
+    private float mDividerMarginLeft = 0.0f;
+
+    private float mDividerMarginRight = 0.0f;
+
+    private float mDividerMarginTop = 0.0f;
+
+    private float mDividerMarginBottom = 0.0f;
+
     private static final String TAG = "PopMenuView";
 
     public PopMenuView(Context context, PopMenuLayout popMenuLayout, int mWidth, int mHeight){
@@ -127,7 +137,11 @@ public class PopMenuView extends PopupWindow {
         this.mMenuTextPaddingRight = Util.dp2px(mContext, mMenuTextPaddingRight);
         this.mMenuTextPaddingTop = Util.dp2px(mContext, mMenuTextPaddingTop);
         this.mMenuTextPaddingBottom = Util.dp2px(mContext, mMenuTextPaddingBottom);
-        mMenuItemHeight = Util.dp2px(mContext, mMenuItemHeight);
+        this.mMenuItemHeight = Util.dp2px(mContext, mMenuItemHeight);
+        this.mDividerMarginLeft = Util.dp2px(mContext, mDividerMarginLeft);
+        this.mDividerMarginRight = Util.dp2px(mContext, mDividerMarginRight);
+        this.mDividerMarginTop = Util.dp2px(mContext, mDividerMarginTop);
+        this.mDividerMarginBottom = Util.dp2px(mContext, mDividerMarginBottom);
         init(context);
     }
 
@@ -157,6 +171,7 @@ public class PopMenuView extends PopupWindow {
 
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.view_menu_container, null);
         mCardView = (CardView) mRootView.findViewById(R.id.cardView);
+        mCardView.setCardBackgroundColor(mMenuLayoutBgColor);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mCardView.getLayoutParams();
         if (mWidth != -1){
             params.width = mWidth;
@@ -240,6 +255,11 @@ public class PopMenuView extends PopupWindow {
         popMenuView.setVerticalMenuBackgroundRes(mVerticalMenuBackgroundRes);
         popMenuView.setMenuTextSize(mMenuTextSize);
         popMenuView.setMaxMenuItemCount(mMaxMenuItemCount);
+        popMenuView.setMenuLayoutBgColor(mMenuLayoutBgColor);
+        popMenuView.setDividerMarginLeft(mDividerMarginLeft);
+        popMenuView.setDividerMarginRight(mDividerMarginRight);
+        popMenuView.setDividerMarginTop(mDividerMarginTop);
+        popMenuView.setDividerMarginBottom(mDividerMarginBottom);
     }
 
     private int getSuitableWidth(List<MenuBean> menus){
@@ -474,5 +494,52 @@ public class PopMenuView extends PopupWindow {
 
     public void setMaxMenuItemCount(int maxMenuItemCount) {
         this.mMaxMenuItemCount = maxMenuItemCount;
+    }
+
+    public int getMenuLayoutBgColor() {
+        return mMenuLayoutBgColor;
+    }
+
+    public void setMenuLayoutBgColor(int menuLayoutBgColor) {
+        this.mMenuLayoutBgColor = menuLayoutBgColor;
+        if (mCardView != null){
+            mCardView.setCardBackgroundColor(mMenuLayoutBgColor);
+        }
+    }
+
+    public float getDividerMarginBottom() {
+        return mDividerMarginBottom;
+    }
+
+    public void setDividerMarginBottom(float dividerMarginBottom) {
+        this.mDividerMarginBottom = dividerMarginBottom;
+        mMenuAdapter.setDividerMarginBottom(mDividerMarginBottom);
+    }
+
+    public float getDividerMarginTop() {
+        return mDividerMarginTop;
+    }
+
+    public void setDividerMarginTop(float dividerMarginTop) {
+        this.mDividerMarginTop = dividerMarginTop;
+        mMenuAdapter.setDividerMarginTop(mDividerMarginTop);
+    }
+
+    public float getDividerMarginRight() {
+        return mDividerMarginRight;
+    }
+
+    public void setDividerMarginRight(float dividerMarginRight) {
+        this.mDividerMarginRight = dividerMarginRight;
+        mMenuAdapter.setDividerMarginRight(mDividerMarginRight);
+    }
+
+    public float getDividerMarginLeft() {
+        return mDividerMarginLeft;
+    }
+
+    public void setDividerMarginLeft(float dividerMarginLeft) {
+        this.mDividerMarginLeft = dividerMarginLeft;
+        mMenuAdapter.setDividerMarginLeft(mDividerMarginLeft);
     }
 }

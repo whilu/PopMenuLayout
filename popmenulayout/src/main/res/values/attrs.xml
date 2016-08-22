@@ -21,5 +21,13 @@
         <attr name="menu_top_padding" format="dimension" />
         <attr name="menu_bottom_padding" format="dimension" />
         <attr name="child_menu_max_count" format="integer" />
+
+        <attr name="level1_menu_layout_bg_color" format="color" />
+        <attr name="cmenu_layout_bg_color" format="color" />
+
+        <attr name="divider_margin_left" format="dimension" />
+        <attr name="divider_margin_right" format="dimension" />
+        <attr name="divider_margin_top" format="dimension" />
+        <attr name="divider_margin_bottom" format="dimension" />
     </declare-styleable>
 </resources>
