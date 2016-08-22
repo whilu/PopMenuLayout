@@ -458,6 +458,7 @@ public class PopMenuLayout extends RelativeLayout {
      */
     public void setConfigJson(String configJson) {
         this.mConfigJson = configJson;
+        invalidateData();
     }
 
     /**
