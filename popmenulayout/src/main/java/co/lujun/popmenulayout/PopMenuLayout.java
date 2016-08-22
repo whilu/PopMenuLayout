@@ -443,6 +443,10 @@ public class PopMenuLayout extends RelativeLayout {
         }
     }
 
+    public int getLayoutWidth() {
+        return mWidth;
+    }
+
     public String getConfigJson() {
         return mConfigJson;
     }
