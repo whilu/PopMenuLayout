@@ -209,7 +209,7 @@ public class PopMenuView extends PopupWindow {
 
             // border menu deal, this level 1 menu layout child's size must >= 2
             if (level1Index >= 1 && level1Index == mPopMenuLayout.getMenus().size() - 1){
-                showX = location[0] - mRootView.getWidth();
+                showX = location[0] - popMenuView.getWidth();
             }else {
                 showX = location[0] + mRootView.getWidth();
             }
@@ -255,8 +255,25 @@ public class PopMenuView extends PopupWindow {
 
         float tmpMaxW = Collections.max(tmpList) + mMenuAdapter.getTextPaddingLeft() +
                 mMenuAdapter.getTextPaddingRight();
-        if (tmpMaxW < mWidth && tmpMaxW > 0){
-            mWidth = (int) tmpMaxW;
+        if (tmpMaxW > 0){
+            if (getParentPopMenuView() != null){
+                PopMenuView popMenuView = getParentPopMenuView();
+                int[] location = new int[2];
+                int[] parentRootViewLocation = new int[2];
+                mPopMenuLayout.getLocationOnScreen(location);
+                getParentPopMenuView().getRootView().getLocationOnScreen(parentRootViewLocation);
+                int width1 = Math.abs(location[0] - parentRootViewLocation[0]);
+                int width2 = Math.abs(location[0] + mPopMenuLayout.getWidth() -
+                        parentRootViewLocation[0] - getParentPopMenuView().getWidth());
+                int leftWidth = Math.max(width1, width2);
+                if (tmpMaxW > leftWidth){
+                    mWidth = leftWidth;
+                }else {
+                    mWidth = (int) tmpMaxW;
+                }
+            }else {
+                mWidth = (int) tmpMaxW;
+            }
         }
         return mWidth;
     }
@@ -302,6 +319,10 @@ public class PopMenuView extends PopupWindow {
 //    public void setLayoutManagerOrientation(int mLayoutManagerOrientation) {
 //        this.mLayoutManagerOrientation = mLayoutManagerOrientation;
 //    }
+
+    public View getRootView() {
+        return mRootView;
+    }
 
     public void setOnMenuClickListener(OnMenuClickListener listener){
         this.mOnMenuClickListener = listener;

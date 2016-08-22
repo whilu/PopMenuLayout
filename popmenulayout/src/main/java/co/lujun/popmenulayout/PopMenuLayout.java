@@ -443,6 +443,10 @@ public class PopMenuLayout extends RelativeLayout {
         }
     }
 
+    public int getLayoutWidth() {
+        return mWidth;
+    }
+
     public String getConfigJson() {
         return mConfigJson;
     }
@@ -454,6 +458,7 @@ public class PopMenuLayout extends RelativeLayout {
      */
     public void setConfigJson(String configJson) {
         this.mConfigJson = configJson;
+        invalidateData();
     }
 
     /**
