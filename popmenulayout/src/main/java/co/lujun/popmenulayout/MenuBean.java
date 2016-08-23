@@ -69,8 +69,10 @@ public class MenuBean {
         this.child = child;
     }
 
-    // TODO 提供 json 与 MenuBean 之间互转
+    // TODO convert MenuBean to json
     public String toJsonString(){
-        return null;
+        return "{\"index\":\"" + index +"\"," +
+                "\"expandable\" : " + expandable + "," +
+                "\"text\":\"" + text + "\"}";
     }
 }

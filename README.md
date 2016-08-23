@@ -16,8 +16,7 @@ Add below dependency in your **build.gradle** file.
 
 ```groovy
 dependencies {
-    // Waiting for upload to jCenter
-    compile 'co.lujun:androidtagview:1.0.1'
+    compile 'co.lujun:androidtagview:0.9.1'
 }
 ```
 
@@ -67,7 +66,7 @@ or using with custom attributes:
 
 Use this library in your code.
 
-**Ensure correct json format, like [this](https://github.com/whilu/PopMenuLayout/blob/master/popmenulayout/src/test/java/co/lujun/popmenulayout/menu_config.json):**
+**Ensure correct json format, like [this](https://github.com/whilu/PopMenuLayout/blob/master/popmenulayout/src/test/java/co/lujun/popmenulayout/menu_config.json), make sure the keys are correct:**
 ```json
 {
   "menus" : [
@@ -86,13 +85,30 @@ then make menus:
 ```java
 String confJson = "your config json string...";
 PopMenuLayout popMenuLayout = (PopMenuLayout) findViewById(R.id.popMenuLayout);
+
 popMenuLayout.setConfigJson(confJson);
+// you can also make menus with MenuBean, like this:
+// MenuBean menu0 = new MenuBean();
+// menu0.setIndex("0");
+// menu0.setExpandable(false);
+// menu0.setText("menu0");
+// MenuBean menu1 = new MenuBean();
+// menu1.setIndex("1");
+// menu1.setExpandable(false);
+// menu1.setText("menu1");
+
+// List<MenuBean> menus = new ArrayList<MenuBean>();
+// menus.add(menu0);
+// menus.add(menu1);
+// popMenuLayout.setMenus(menus);
 
 // Add callback for menu click
 popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
     @Override
     public void onMenuClick(int level1Index, int level2Index, int level3Index) {
         // deal the menu click callback...
+        // If you click a menu and the menu's index is '121', 
+        // in this callback, level1Index = 1, level2Index = 2, level3Index = 1
         
     }
 });

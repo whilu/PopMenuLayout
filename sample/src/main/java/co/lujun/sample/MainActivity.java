@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import co.lujun.popmenulayout.MenuBean;
 import co.lujun.popmenulayout.OnMenuClickListener;
 import co.lujun.popmenulayout.PopMenuLayout;
 
@@ -18,81 +22,98 @@ public class MainActivity extends Activity {
 
         final TextView textView = (TextView) findViewById(R.id.text);
 
-        String confJson = "{\n" +
-                "  \"menus\" : [\n" +
-                "    {\n" +
-                "      \"index\" : \"0\",\n" +
-                "      \"expandable\" : false,\n" +
-                "      \"text\" : \"Menu 0\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"index\" : \"1\",\n" +
-                "      \"expandable\" : true,\n" +
-                "      \"text\" : \"Menu 1\",\n" +
-                "      \"child\" : [\n" +
-                "        {\n" +
-                "          \"index\" : \"10\",\n" +
-                "          \"expandable\" : false,\n" +
-                "          \"text\" : \"Child Menu 10\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"index\" : \"11\",\n" +
-                "          \"expandable\" : false,\n" +
-                "          \"text\" : \"Child Menu 11\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"index\" : \"12\",\n" +
-                "          \"expandable\" : true,\n" +
-                "          \"text\" : \"Child Menu 12\",\n" +
-                "          \"child\" : [\n" +
-                "            {\n" +
-                "              \"index\" : \"120\",\n" +
-                "              \"expandable\" : false,\n" +
-                "              \"text\" : \"Child Menu 120\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "              \"index\" : \"121\",\n" +
-                "              \"expandable\" : false,\n" +
-                "              \"text\" : \"Child Menu 121\"\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"index\" : \"2\",\n" +
-                "      \"expandable\" : true,\n" +
-                "      \"text\" : \"Menu 2\",\n" +
-                "      \"child\" : [\n" +
-                "        {\n" +
-                "          \"index\" : \"20\",\n" +
-                "          \"expandable\" : false,\n" +
-                "          \"text\" : \"Child Menu 20\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"index\" : \"21\",\n" +
-                "          \"expandable\" : true,\n" +
-                "          \"text\" : \"Child Menu 21\",\n" +
-                "          \"child\" : [\n" +
-                "            {\n" +
-                "              \"index\" : \"210\",\n" +
-                "              \"expandable\" : false,\n" +
-                "              \"text\" : \"Child Menu 210\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "              \"index\" : \"211\",\n" +
-                "              \"expandable\" : false,\n" +
-                "              \"text\" : \"Child Menu 211\"\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
+        String confJson = "{" +
+                "  \"menus\" : [" +
+                "    {" +
+                "      \"index\" : \"0\"," +
+                "      \"expandable\" : false," +
+                "      \"text\" : \"Menu 0\"" +
+                "    }," +
+                "    {" +
+                "      \"index\" : \"1\"," +
+                "      \"expandable\" : true," +
+                "      \"text\" : \"Menu 1\"," +
+                "      \"child\" : [" +
+                "        {" +
+                "          \"index\" : \"10\"," +
+                "          \"expandable\" : false," +
+                "          \"text\" : \"Child Menu 10\"" +
+                "        }," +
+                "        {" +
+                "          \"index\" : \"11\"," +
+                "          \"expandable\" : false," +
+                "          \"text\" : \"Child Menu 11\"" +
+                "        }," +
+                "        {" +
+                "          \"index\" : \"12\"," +
+                "          \"expandable\" : true," +
+                "          \"text\" : \"Child Menu 12\"," +
+                "          \"child\" : [" +
+                "            {" +
+                "              \"index\" : \"120\"," +
+                "              \"expandable\" : false," +
+                "              \"text\" : \"Child Menu 120\"" +
+                "            }," +
+                "            {" +
+                "              \"index\" : \"121\"," +
+                "              \"expandable\" : false," +
+                "              \"text\" : \"Child Menu 121\"" +
+                "            }" +
+                "          ]" +
+                "        }" +
+                "      ]" +
+                "    }," +
+                "    {" +
+                "      \"index\" : \"2\"," +
+                "      \"expandable\" : true," +
+                "      \"text\" : \"Menu 2\"," +
+                "      \"child\" : [" +
+                "        {" +
+                "          \"index\" : \"20\"," +
+                "          \"expandable\" : false," +
+                "          \"text\" : \"Child Menu 20\"" +
+                "        }," +
+                "        {" +
+                "          \"index\" : \"21\"," +
+                "          \"expandable\" : true," +
+                "          \"text\" : \"Child Menu 21\"," +
+                "          \"child\" : [" +
+                "            {" +
+                "              \"index\" : \"210\"," +
+                "              \"expandable\" : false," +
+                "              \"text\" : \"Child Menu 210\"" +
+                "            }," +
+                "            {" +
+                "              \"index\" : \"211\"," +
+                "              \"expandable\" : false," +
+                "              \"text\" : \"Child Menu 211\"" +
+                "            }" +
+                "          ]" +
+                "        }" +
+                "      ]" +
+                "    }" +
+                "  ]" +
                 "}";
 
         PopMenuLayout popMenuLayout = (PopMenuLayout) findViewById(R.id.popMenuLayout);
         popMenuLayout.setConfigJson(confJson);
+
+        // make menus with MenuBean
+//        MenuBean menu0 = new MenuBean();
+//        menu0.setIndex("0");
+//        menu0.setExpandable(false);
+//        menu0.setText("menu0");
+//
+//        MenuBean menu1 = new MenuBean();
+//        menu1.setIndex("1");
+//        menu1.setExpandable(false);
+//        menu1.setText("menu1");
+//
+//        List<MenuBean> menus = new ArrayList<MenuBean>();
+//        menus.add(menu0);
+//        menus.add(menu1);
+//        popMenuLayout.setMenus(menus);
+
         popMenuLayout.setLevel2MenuAnimStyle(R.style.PopAnimation);
         popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
             @Override

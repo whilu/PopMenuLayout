@@ -74,7 +74,7 @@
 // Note:
 //
 // "index" : 121, this means this menu located
-// in level1(menu index 1) -> level2(menu index 2) -> level3(menu index 1)
+// in level 1(menu index 1) -> level2(menu index 2) -> level3(menu index 1)
 //
 // level 1 menu   level 2 menu   level 2 menu
 //       |              |              |

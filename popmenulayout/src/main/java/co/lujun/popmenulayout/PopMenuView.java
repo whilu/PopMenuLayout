@@ -292,7 +292,11 @@ public class PopMenuView extends PopupWindow {
                     mWidth = (int) tmpMaxW;
                 }
             }else {
-                mWidth = (int) tmpMaxW;
+                if (tmpMaxW > mPopMenuLayout.getWidth()){
+                    mWidth = mPopMenuLayout.getWidth();
+                }else {
+                    mWidth = (int) tmpMaxW;
+                }
             }
         }
         return mWidth;

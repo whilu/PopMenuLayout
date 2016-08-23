@@ -544,11 +544,14 @@ public class PopMenuLayout extends RelativeLayout {
     /**
      * Set the menus with MenuBean object to make PopMenuLayout.
      *
-     * @param mMenus
+     * @param menus
      * @see #setConfigJson(String)
      */
-    public void setMenus(List<MenuBean> mMenus) {
-        this.mMenus = mMenus;
+    public void setMenus(List<MenuBean> menus) {
+        this.mMenus.clear();
+        for (MenuBean menu : menus) {
+            this.mMenus.add(menu);
+        }
     }
 
     public float getChildMenuItemHeight() {
