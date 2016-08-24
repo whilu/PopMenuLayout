@@ -16,7 +16,7 @@ Add below dependency in your **build.gradle** file.
 
 ```groovy
 dependencies {
-    compile 'co.lujun:androidtagview:0.9.1'
+    compile 'co.lujun:popmenulayout:0.9.1'
 }
 ```
 
