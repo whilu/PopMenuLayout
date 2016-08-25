@@ -27,6 +27,7 @@ package co.lujun.popmenulayout;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -127,6 +128,7 @@ public class PopMenuView extends PopupWindow {
 
     public PopMenuView(Context context, PopMenuLayout popMenuLayout,
                        PopMenuView parentPopMenuView, int mWidth, int mHeight){
+        super(context);
         this.mContext = context;
         this.mPopMenuLayout = popMenuLayout;
         this.mParentPopMenuView = parentPopMenuView;
@@ -190,6 +192,7 @@ public class PopMenuView extends PopupWindow {
         setHeight(RelativeLayout.LayoutParams.WRAP_CONTENT);
         setFocusable(true);
         setAnimationStyle(mAnimStyle);
+        setBackgroundDrawable(new ColorDrawable(0x00000000));
     }
 
     @Override
