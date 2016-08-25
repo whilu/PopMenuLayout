@@ -1,6 +1,6 @@
 # PopMenuLayout
 
-[![Build Status](https://travis-ci.org/whilu/PopMenuLayout.svg)](https://travis-ci.org/whilu/PopMenuLayout)
+[![Build Status](https://travis-ci.org/whilu/PopMenuLayout.svg)](https://travis-ci.org/whilu/PopMenuLayout) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PopMenuLayout-green.svg?style=true)](https://android-arsenal.com/details/1/4219)
 
 A multi level menu view(like WeChat subscription Accounts) library for Android.
 
@@ -16,7 +16,7 @@ Add below dependency in your **build.gradle** file.
 
 ```groovy
 dependencies {
-    compile 'co.lujun:popmenulayout:0.9.1'
+    compile 'co.lujun:popmenulayout:0.9.2'
 }
 ```
 
@@ -145,6 +145,10 @@ popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
 **You can set these attributes in layout file, or use setters(each attribute has get and set method) to set them.**
 
 ## Change logs
+###0.9.2(2016-8-25)
+- issue [#2](https://github.com/whilu/PopMenuLayout/issues/2)
+- fix bugs
+
 ###0.9.1(2016-8-23)
 - Alpha version(0.9.1)
 
