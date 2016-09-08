@@ -552,6 +552,7 @@ public class PopMenuLayout extends RelativeLayout {
         for (MenuBean menu : menus) {
             this.mMenus.add(menu);
         }
+        invalidateData();
     }
 
     public float getChildMenuItemHeight() {
