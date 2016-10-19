@@ -233,6 +233,7 @@ public class PopMenuLayout extends RelativeLayout {
         invalidateViewsAttr();
 
         recyclerView = new RecyclerView(mContext, attrs, defStyleAttr);
+        recyclerView.setId(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(mContext);
         mLayoutManager.setOrientation(mLayoutManagerOrientation);
         recyclerView.setLayoutManager(mLayoutManager);
