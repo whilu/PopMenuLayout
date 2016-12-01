@@ -32,7 +32,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -305,13 +304,16 @@ public class PopMenuView extends PopupWindow {
         return mWidth;
     }
 
-    public int getHeight() {
-        return mHeight;
-    }
-
+    @Override
     public void setHeight(int mHeight) {
+        super.setHeight(mHeight);
         this.mHeight = mHeight;
     }
+
+//    public void setWidth(int mWidth) {
+//        super.setWidth(mWidth);
+//        this.mWidth = mWidth;
+//    }
 
     public int getWidth() {
         return mWidth;

@@ -16,7 +16,7 @@ Add below dependency in your **build.gradle** file.
 
 ```groovy
 dependencies {
-    compile 'co.lujun:popmenulayout:0.9.2'
+    compile 'co.lujun:popmenulayout:0.9.3'
 }
 ```
 
@@ -145,6 +145,10 @@ popMenuLayout.setOnMenuClickListener(new OnMenuClickListener() {
 **You can set these attributes in layout file, or use setters(each attribute has get and set method) to set them.**
 
 ## Change logs
+###0.9.3(2016-12-1)
+- issue [#3](https://github.com/whilu/PopMenuLayout/issues/3)
+- fix bugs
+
 ###0.9.2(2016-8-25)
 - issue [#2](https://github.com/whilu/PopMenuLayout/issues/2)
 - fix bugs
